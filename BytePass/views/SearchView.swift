@@ -1,4 +1,4 @@
-import FirebaseAnalytics
+//import FirebaseAnalytics
 import GoogleDriveClient
 import Logging
 import SwiftUI
@@ -229,7 +229,7 @@ struct SearchView: View {
                 numberOfResults = searchResults.count
             }
         }
-        .analyticsScreen(name: "\(SearchView.self)")
+        //.analyticsScreen(name: "\(SearchView.self)")
 
     }
     private func handleSync() async {
