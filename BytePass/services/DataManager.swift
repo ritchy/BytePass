@@ -310,10 +310,12 @@ class DataManager: ObservableObject {
             await MainActor.run {
                 entries[index] = entry
             }
-            log.info ("replaced \(entry.id) - \(entry.name) - \(entry.notes)")
+            log.info("replaced \(entry.id) - \(entry.name) - \(entry.notes)")
             //entries.sorted { $0.name < $1.name }
         } else {
-            log.warning("Unable to find entry to replace: \(entry.id) - \(entry.name)")
+            log.warning(
+                "Unable to find entry to replace: \(entry.id) - \(entry.name)"
+            )
         }
 
         //await MainActor.run {
@@ -350,13 +352,17 @@ class DataManager: ObservableObject {
                 var lastUpdatedDate: Date? = dateFormatter.date(
                     from: incomingEntry.lastUpdated
                 )
-                if (lastUpdatedDate == nil) {
+                if lastUpdatedDate == nil {
                     log.warning(
                         "Missing date in incoming entry '\(incomingEntry.name)', setting it to 1970 ..."
                     )
-                    let currentTimeInMillis = Int64(NSDate().timeIntervalSince1970 * 1000)
+                    let currentTimeInMillis = Int64(
+                        NSDate().timeIntervalSince1970 * 1000
+                    )
                     let secondsSince1970 = currentTimeInMillis / 1000
-                    lastUpdatedDate = Date(timeIntervalSince1970: TimeInterval(secondsSince1970))
+                    lastUpdatedDate = Date(
+                        timeIntervalSince1970: TimeInterval(secondsSince1970)
+                    )
                     //let lastUpdatedDate =
                     //    dateFormatter.string(
                     //        from: date
@@ -459,20 +465,13 @@ class DataManager: ObservableObject {
     func loadKey() async -> SymmetricKey {
         let settings = await loadSettingsDocument()
         if let keyBase64 = settings?.keyBase64, !keyBase64.isEmpty {
-            do {
-                // Decode the base64 string to get the raw key data
-                if let keyData = Data(base64Encoded: keyBase64) {
-                    log.info("Got key from settings: \(keyBase64) ....")
-                    // Create a SymmetricKey from the raw key data
-                    return SymmetricKey(data: keyData)
-                }
-            } catch {
-                print(
-                    "Error creating key from base64: \(error.localizedDescription)"
-                )
+            // Decode the base64 string to get the raw key data
+            if let keyData = Data(base64Encoded: keyBase64) {
+                log.info("Got key from settings: \(keyBase64) ....")
+                // Create a SymmetricKey from the raw key data
+                return SymmetricKey(data: keyData)
             }
         }
-
         // If keyBase64 is empty or there's an error, create a new random key
         print("Using fallback random key")
         return SymmetricKey(size: .bits256)
