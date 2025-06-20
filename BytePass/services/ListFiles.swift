@@ -10,7 +10,7 @@ import Logging
 
 public struct ListFiles: Sendable {
     let params: Params
-    let log = Logger(label: "com.jarbo.bytepass.ListFiles")
+    let log = Logger(label: "io.bytestream.bytepass.ListFiles")
 
     func buildRequest() -> URLRequest {
         var request: URLRequest  //= {

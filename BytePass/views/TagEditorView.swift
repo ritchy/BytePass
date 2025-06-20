@@ -14,7 +14,7 @@ struct TagEditorView: View {
     @Binding var selectedAccount: Account
     @StateObject var viewModel: TagEditorViewModel
 
-    let log = Logger(label: "com.jarbo.bytepass.TagEditorView")
+    let log = Logger(label: "io.bytestream.bytepass.TagEditorView")
 
     func getViewModel() -> TagEditorViewModel {
         return viewModel

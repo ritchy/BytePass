@@ -9,7 +9,7 @@ import GoogleSignIn
 import Logging
 
 class GoogleService: ObservableObject {
-    let log = Logger(label: "com.jarbo.bytepass.GoogleService")
+    let log = Logger(label: "io.bytestream.bytepass.GoogleService")
     var dataManager = DataManager()
 
     private let baseUrlString = "https://people.googleapis.com/v1/people/me"
