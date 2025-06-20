@@ -33,14 +33,10 @@ class GoogleService: ObservableObject {
 
     public static let liveValue = Client.live(
         config: Config(
-            clientID:
-                "324613767651-n7v5dn0upkc91f4movirt2n67sqbd6iq.apps.googleusercontent.com",
-            //"545101176261-21ebgkhd40k58tsu59lg5u99mp7nludn.apps.googleusercontent.com",
+            clientID: "<here>",
             authScope: "https://www.googleapis.com/auth/drive.appdata",
             //authScope: "https://www.googleapis.com/auth/drive",
-            redirectURI:
-                "com.googleusercontent.apps.324613767651-n7v5dn0upkc91f4movirt2n67sqbd6iq://"
-                //"com.googleusercontent.apps.545101176261-21ebgkhd40k58tsu59lg5u99mp7nludn://"
+            redirectURI:"<>"
         )
     )
 
