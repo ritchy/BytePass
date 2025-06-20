@@ -37,9 +37,22 @@
 		A652E96D2E04D2C800D519D6 /* BytePassUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BytePassUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A6FB99AD2E05C7F0003C3FE4 /* Exceptions for "BytePass" folder in "BytePass" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A652E9552E04D2C600D519D6 /* BytePass */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A652E9582E04D2C600D519D6 /* BytePass */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A6FB99AD2E05C7F0003C3FE4 /* Exceptions for "BytePass" folder in "BytePass" target */,
+			);
 			path = BytePass;
 			sourceTree = "<group>";
 		};
@@ -432,6 +445,7 @@
 				DEVELOPMENT_TEAM = NYJ7Z9N5HK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BytePass/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -461,6 +475,7 @@
 				DEVELOPMENT_TEAM = NYJ7Z9N5HK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BytePass/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

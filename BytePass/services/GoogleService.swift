@@ -2,8 +2,6 @@
 //  GoogleService.swift
 //  BytePass
 //
-//  Created by Robert Ritchy on 5/14/25.
-//
 
 import Foundation
 import GoogleDriveClient
@@ -32,12 +30,7 @@ class GoogleService: ObservableObject {
     }
 
     public static let liveValue = Client.live(
-        config: Config(
-            clientID: "<here>",
-            authScope: "https://www.googleapis.com/auth/drive.appdata",
-            //authScope: "https://www.googleapis.com/auth/drive",
-            redirectURI:"<>"
-        )
+        config: getConfig()
     )
 
     var googleDriveClient: GoogleDriveClient.Client

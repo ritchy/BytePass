@@ -92,7 +92,7 @@ struct EditableDropdown: View {
     @StateObject var viewModel: TagEditorViewModel
     //@Binding var selectedAccount: Account
 
-    let log = Logger(label: "com.jarbo.bytepass.EditableDropdown")
+    let log = Logger(label: "io.bytestream.bytepass.EditableDropdown")
 
     init(viewModel: TagEditorViewModel) {
         //}, selectedAccount: Binding<Account>) {

@@ -14,7 +14,7 @@ struct AccountDetailView: View {
     @State private var isPresentingEditView = false
     @Binding var results: [Account]
 
-    let log = Logger(label: "com.jarbo.bytepass.AccountDetailView")
+    let log = Logger(label: "io.bytestream.bytepass.AccountDetailView")
 
     //public init(
     //    selectedAccount: Account

@@ -9,7 +9,7 @@ struct ResultsView: View {
     @State private var showLoadingScreen: Bool = false
 
     let filterType: String
-    let log = Logger(label: "com.jarbo.bytepass.ResultsView")
+    let log = Logger(label: "io.bytestream.bytepass.ResultsView")
 
     public init(
         results: [Account],

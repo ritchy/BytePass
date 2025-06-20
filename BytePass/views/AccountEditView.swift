@@ -15,7 +15,7 @@ struct AccountEditView: View {
     
     //var tagEditorView: TagEditorView?
 
-    let log = Logger(label: "com.jarbo.bytepass.AccountEditView")
+    let log = Logger(label: "io.bytestream.bytepass.AccountEditView")
 
     /**
      var name: String

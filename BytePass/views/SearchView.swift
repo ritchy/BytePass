@@ -24,7 +24,7 @@ struct SearchView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    let log = Logger(label: "com.jarbo.bytepass.SearchView")
+    let log = Logger(label: "io.bytestream.bytepass.SearchView")
 
     private let columns = [
         GridItem(.adaptive(minimum: 150, maximum: 150), spacing: 10)

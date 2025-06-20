@@ -16,7 +16,7 @@ class TagEditorViewModel: ObservableObject {
     @Published var tagText = ""
     @Binding var selectedAccount: Account
 
-    let log = Logger(label: "com.jarbo.bytepass.TagEditorViewModel")
+    let log = Logger(label: "io.bytestream.bytepass.TagEditorViewModel")
 
     init(selectedTags: [String], allTags: [String], selectedAccount: Binding<Account>) {
         _selectedTags = .init(wrappedValue: selectedTags)

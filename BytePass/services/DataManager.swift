@@ -12,7 +12,7 @@ class DataManager: ObservableObject {
     var accountsDocument = AccountsDocument(accounts: [])
     private let fileManager = FileManager.default
     private let documentsDirectory: URL
-    let log = Logger(label: "com.jarbo.bytepass.DataManager")
+    let log = Logger(label: "io.bytestream.bytepass.DataManager")
 
     init() {
         print("NEW DATA MANAGER")
