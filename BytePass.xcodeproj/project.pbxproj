@@ -10,6 +10,8 @@
 		A652E9A72E04E42100D519D6 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = A652E9A62E04E42100D519D6 /* Logging */; };
 		A652E9A92E04E42E00D519D6 /* GoogleDriveClient in Frameworks */ = {isa = PBXBuildFile; productRef = A652E9A82E04E42E00D519D6 /* GoogleDriveClient */; };
 		A652E9AC2E059BFF00D519D6 /* Crypto in Frameworks */ = {isa = PBXBuildFile; productRef = A652E9AB2E059BFF00D519D6 /* Crypto */; };
+		A6FB99932E05A78C003C3FE4 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A6FB99922E05A78C003C3FE4 /* GoogleSignIn */; };
+		A6FB99952E05A78C003C3FE4 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A6FB99942E05A78C003C3FE4 /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +60,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6FB99952E05A78C003C3FE4 /* GoogleSignInSwift in Frameworks */,
 				A652E9AC2E059BFF00D519D6 /* Crypto in Frameworks */,
+				A6FB99932E05A78C003C3FE4 /* GoogleSignIn in Frameworks */,
 				A652E9A72E04E42100D519D6 /* Logging in Frameworks */,
 				A652E9A92E04E42E00D519D6 /* GoogleDriveClient in Frameworks */,
 			);
@@ -132,6 +136,8 @@
 				A652E9A62E04E42100D519D6 /* Logging */,
 				A652E9A82E04E42E00D519D6 /* GoogleDriveClient */,
 				A652E9AB2E059BFF00D519D6 /* Crypto */,
+				A6FB99922E05A78C003C3FE4 /* GoogleSignIn */,
+				A6FB99942E05A78C003C3FE4 /* GoogleSignInSwift */,
 			);
 			productName = BytePass;
 			productReference = A652E9562E04D2C600D519D6 /* BytePass.app */;
@@ -219,6 +225,7 @@
 				A652E98A2E04DED500D519D6 /* XCRemoteSwiftPackageReference "swift-log" */,
 				A652E9A42E04E27300D519D6 /* XCRemoteSwiftPackageReference "swift-google-drive-client" */,
 				A652E9AA2E059BE400D519D6 /* XCRemoteSwiftPackageReference "swift-crypto" */,
+				A6FB99912E05A739003C3FE4 /* XCRemoteSwiftPackageReference "GoogleSignin-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A652E9572E04D2C600D519D6 /* Products */;
@@ -611,6 +618,14 @@
 				minimumVersion = 3.12.3;
 			};
 		};
+		A6FB99912E05A739003C3FE4 /* XCRemoteSwiftPackageReference "GoogleSignin-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignin-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -628,6 +643,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A652E9AA2E059BE400D519D6 /* XCRemoteSwiftPackageReference "swift-crypto" */;
 			productName = Crypto;
+		};
+		A6FB99922E05A78C003C3FE4 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6FB99912E05A739003C3FE4 /* XCRemoteSwiftPackageReference "GoogleSignin-iOS" */;
+			productName = GoogleSignIn;
+		};
+		A6FB99942E05A78C003C3FE4 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6FB99912E05A739003C3FE4 /* XCRemoteSwiftPackageReference "GoogleSignin-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

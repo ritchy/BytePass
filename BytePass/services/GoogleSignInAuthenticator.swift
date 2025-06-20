@@ -22,11 +22,12 @@ final class GoogleSignInAuthenticator: ObservableObject {
   /// - note: Successful calls to this will set the `authViewModel`'s `state` property.
   func signIn() {
 #if os(iOS)
+      //guard let rootViewController = UIWindowScene.windows.first?.rootViewController else {
     guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else {
       print("There is no root view controller!")
       return
     }
-    let manualNonce = UUID().uuidString
+    //let manualNonce = UUID().uuidString
 
       GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, additionalScopes: ["https://www.googleapis.com/auth/drive.appdata"]){
 //    GIDSignIn.sharedInstance.signIn(
