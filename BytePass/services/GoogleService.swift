@@ -558,7 +558,7 @@ class GoogleService: ObservableObject {
             with: data,
             options: []
         )
-        if let JSONResponse = JSONResponse as? [String: Any] {
+        if JSONResponse is [String: Any] {
             //print(JSONResponse)
             listFiles.decodeResponse(data: data)
             //let decoder = JSONDecoder()
