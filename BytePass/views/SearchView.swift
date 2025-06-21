@@ -339,7 +339,7 @@ struct SearchView: View {
             .environmentObject(
                 {
                     let manager = DataManager()
-                    let googleService = GoogleService()
+                    //let googleService = GoogleService()
                     manager.entries = [
                         Account(
                             name: "Acme Login",
