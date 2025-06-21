@@ -303,6 +303,12 @@ class DataManager: ObservableObject {
         return toSearch.first { $0.id == id }
     }
 
+    func updateEntry(_ entry: Account) async {
+        var newEntry = entry
+        newEntry.lastUpdated = accountsDocument.getDateString()
+        await replaceEntry(newEntry)
+    }
+
     func replaceEntry(_ entry: Account) async {
 
         let index = entries.firstIndex(where: { $0.id == entry.id }) ?? -1
@@ -330,6 +336,23 @@ class DataManager: ObservableObject {
         }
     }
 
+    func deleteEntry(_ entry: Account) {
+        let index = entries.firstIndex(where: { $0.id == entry.id }) ?? -1
+        if index > 0 {
+            //await MainActor.run {
+            //     entries[index].status = "deleted"
+            //     entries[index].lastUpdated = getDateString()
+            // }
+            accountsDocument.deleteEntry(entry: entry)
+            entries.removeAll(where: { $0.id == entry.id })
+            log.info("deleted \(entry.id) - \(entry.name)")
+            //entries.sorted { $0.name < $1.name }
+        } else {
+            log.warning(
+                "Unable to find entry to delete: \(entry.id) - \(entry.name)"
+            )
+        }
+    }
     func reconcileAccounts(incomingAccountsDocument: AccountsDocument) async
         -> Bool
     {
@@ -585,6 +608,7 @@ class DataManager: ObservableObject {
     func searchEntries(query: String) -> [Account] {
         guard !query.isEmpty else { return searchActiveEntries() }
 
+        log.info("searching all entries for \(query)")
         let lowercasedQuery = query.lowercased()
         searchResults = entries.filter { entry in
             entry.name.lowercased().contains(lowercasedQuery)
@@ -600,6 +624,7 @@ class DataManager: ObservableObject {
                 }
                     && entry.status == "active"
         }.sorted { $0.name < $1.name }
+        //log.info ("search results \(searchResults[0].status)")
         return searchResults
     }
 

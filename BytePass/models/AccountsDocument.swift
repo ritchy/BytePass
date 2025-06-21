@@ -10,6 +10,42 @@ import Foundation
 struct AccountsDocument: Codable {
     var lastUpdated: String = String(NSDate().timeIntervalSince1970 * 1000)
     var accounts: [Account]
+    var deletedAccounts: [Account]?
+    
+    mutating func deleteEntry(entry: Account) {
+        accounts.removeAll(where: { $0.id == entry.id })
+        if deletedAccounts == nil {
+            deletedAccounts = []
+        }
+        var toAdd = entry
+        toAdd.lastUpdated = getDateString()
+        deletedAccounts?.append(toAdd)
+    }
+    
+    func getDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat =
+            "yyyy-MM-dd HH:mm:ss.SSSSSS"
+        let currentDate = Date()
+        let formattedDateString =
+            dateFormatter.string(
+                from: currentDate
+            )  //  Convert Date to String
+        //print(formattedDateString)
+        let currentTimeInMillis = Int64(
+            NSDate().timeIntervalSince1970
+                * 1000
+        )
+        let secondsSince1970 =
+            currentTimeInMillis / 1000
+        let _ = Date(
+            timeIntervalSince1970:
+                TimeInterval(
+                    secondsSince1970
+                )
+        )
+        return formattedDateString
+    }
 }
 
 struct Account: Codable, Identifiable, Equatable {
@@ -50,8 +86,8 @@ struct Account: Codable, Identifiable, Equatable {
     }
 
     enum EntryStatus: String {
-        case active
-        case deleted
+        case active = "active"
+        case deleted = "deleted"
     }
 
     static func generateNewId() -> Int {

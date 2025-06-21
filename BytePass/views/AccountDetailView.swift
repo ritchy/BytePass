@@ -10,19 +10,48 @@ import SwiftUI
 
 struct AccountDetailView: View {
     @EnvironmentObject var dataManager: DataManager
+    @Environment(\.dismiss) private var dismiss
     @State var selectedAccount: Account
     @State private var isPresentingEditView = false
+    @State var isDeleted: Bool = false
     @Binding var results: [Account]
 
     let log = Logger(label: "io.bytestream.bytepass.AccountDetailView")
 
-    //public init(
-    //    selectedAccount: Account
-    //) {
-    //    self.selectedAccount = selectedAccount
-    //}
+    func considerDismiss() {
+        if selectedAccount.status == "deleted" {
+            Task {
+                await deleteSelectedItem()
+            }
+        }
+    }
 
+    func deleteSelectedItem() async {
+        log.info("deleting...")
+        await MainActor.run {
+            dataManager.deleteEntry(selectedAccount)
+            isDeleted = true
+        }
+        Task {
+            await _ = dataManager.saveCurrentAccountsDocument()
+        }
+    }
     var body: some View {
+        if isDeleted {
+            VStack {
+                Button("\(selectedAccount.name) deleted") {
+                    results.removeAll(where: {
+                        $0.id == selectedAccount.id
+                    })
+                    dismiss()
+                }
+            }
+        } else {
+            getMainView()
+        }
+    }
+
+    func getMainView() -> some View {
         VStack(alignment: .center) {
             Label(selectedAccount.name, systemImage: "storefront")
             List {
@@ -56,7 +85,10 @@ struct AccountDetailView: View {
 
                 }
                 Section(
-                    header: Label("Personal Information", systemImage: "person")
+                    header: Label(
+                        "Personal Information",
+                        systemImage: "person"
+                    )
                 ) {
                     HStack(alignment: .center) {
                         Text("Username:")
@@ -123,11 +155,28 @@ struct AccountDetailView: View {
                 }
             }
         }
+        .onAppear {
+            log.info("onAppear() .. consider dismissing ..")
+            considerDismiss()
+        }
         .padding(.all, 8)
         .toolbar {
-            Button("Edit") {
-                isPresentingEditView = true
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Edit") {
+                    isPresentingEditView = true
+                }
             }
+            ToolbarItem(placement: .bottomBar) {
+                HStack(alignment: .center) {
+                    Spacer()
+                    DeleteEntryButton(
+                        selectedAccount: $selectedAccount,
+                        isDeleted: $isDeleted
+                    )
+                    Spacer()
+                }
+            }
+
         }
         .sheet(
             isPresented: $isPresentingEditView,
@@ -165,39 +214,10 @@ struct AccountDetailView: View {
                                         $0.id == selectedAccount.id
                                     })
                                     if index != nil {
-                                        var toSave = selectedAccount
-                                        let dateFormatter = DateFormatter()
-                                        dateFormatter.dateFormat =
-                                            "yyyy-MM-dd HH:mm:ss.SSSSSS"
-                                        let currentDate = Date()
-                                        let formattedDateString =
-                                            dateFormatter.string(
-                                                from: currentDate
-                                            )  //  Convert Date to String
-                                        //print(formattedDateString)
-                                        let currentTimeInMillis = Int64(
-                                            NSDate().timeIntervalSince1970
-                                                * 1000
-                                        )
-                                        let secondsSince1970 =
-                                            currentTimeInMillis / 1000
-                                        let date = Date(
-                                            timeIntervalSince1970: TimeInterval(
-                                                secondsSince1970
-                                            )
-                                        )
-                                        //print ("----> \(date)")
-                                        //toSave.lastUpdated = String(currentTimeInMillis)
-                                        toSave.lastUpdated = formattedDateString
-                                        log.info(
-                                            "new updated date: \(formattedDateString) - \(toSave.lastUpdated)"
-                                        )
+                                        let toSave = selectedAccount
                                         results[index!] = toSave
-                                        log.info(
-                                            "new updated date: \(formattedDateString) - \(toSave.lastUpdated)"
-                                        )
                                         Task {
-                                            await dataManager.replaceEntry(
+                                            await dataManager.updateEntry(
                                                 toSave
                                             )
                                             _ =
@@ -206,12 +226,61 @@ struct AccountDetailView: View {
                                         }
                                     }
                                 } else {
-                                    log.info("nothing changed, no need to save")
+                                    log.info(
+                                        "nothing changed, no need to save"
+                                    )
                                 }
                             }
                         }
                     }
             }
+        }
+
+    }
+
+    struct DeleteEntryButton: View {
+        @EnvironmentObject var dataManager: DataManager
+        @State private var showPopup = false
+        @Binding var selectedAccount: Account
+        @Binding var isDeleted: Bool
+
+        let log = Logger(label: "io.bytestream.bytepass.DeleteEntryButton")
+
+        var body: some View {
+            Button {
+                print("delete ..")
+                self.showPopup = true
+            } label: {
+                Text("Delete")
+                Image(systemName: "trash")
+            }
+            .alert("Confirm Delete", isPresented: $showPopup) {
+                Button(role: .destructive) {
+                    // Handle the deletion.
+                    Task {
+                        await deleteSelectedItem()
+                        isDeleted = true
+                    }
+                } label: {
+                    Text("Yes, Delete")
+                }
+            } message: {
+                Text("Are you sure you want to delete \(selectedAccount.name)?")
+            }
+        }
+
+        func deleteSelectedItem() async {
+            log.info("deleting...")
+            await MainActor.run {
+                dataManager.deleteEntry(selectedAccount)
+            }
+            Task {
+                await _ = dataManager.saveCurrentAccountsDocument()
+            }
+        }
+
+        func cancelDelete() {
+            log.info("Canceling...")
         }
     }
 }
