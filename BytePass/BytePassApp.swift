@@ -23,8 +23,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct BytePassApp: App {
-    @StateObject var dataManager = DataManager()
-    @StateObject var googleService = GoogleService()
+    var dataManager = DataManager()
+    var googleService: GoogleService?
+    //@StateObject var googleService = GoogleService(dataManager: DataManager())
     @StateObject var authViewModel = AuthViewModel()
 
     let log = Logger(label: "io.bytestream.bytepass.BytePassApp")
@@ -33,10 +34,10 @@ struct BytePassApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     init() {
-        print("initialized app delegate...")
+        //print("initialized app delegate...")
+        googleService = GoogleService (dataManager:dataManager)
         // Configure app settings
         setupAppSettings()
-
     }
 
     var body: some Scene {
@@ -45,7 +46,7 @@ struct BytePassApp: App {
                 SearchView()
                     //LoadJSONView()
                     .environmentObject(dataManager)
-                    .environmentObject(googleService)
+                    .environmentObject(googleService!)
                     .environmentObject(authViewModel)
             }
             .onAppear {

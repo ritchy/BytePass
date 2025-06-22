@@ -10,10 +10,10 @@ import Logging
 
 class GoogleService: ObservableObject {
     let log = Logger(label: "io.bytestream.bytepass.GoogleService")
-    var dataManager = DataManager()
-
     private let baseUrlString = "https://people.googleapis.com/v1/people/me"
     private let fileListQuery = URLQueryItem(name: "trash", value: "false")
+
+    var dataManager : DataManager
 
     //var isSignedIn = false
     var filesList: FilesList?
@@ -35,8 +35,9 @@ class GoogleService: ObservableObject {
 
     var googleDriveClient: GoogleDriveClient.Client
 
-    public init() {
+    public init(dataManager: DataManager) {
         self.googleDriveClient = GoogleService.liveValue
+        self.dataManager = dataManager
     }
 
     func isSignedIn() async -> Bool {

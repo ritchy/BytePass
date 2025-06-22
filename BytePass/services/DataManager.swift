@@ -13,24 +13,49 @@ class DataManager: ObservableObject {
     private let fileManager = FileManager.default
     private let documentsDirectory: URL
     let log = Logger(label: "io.bytestream.bytepass.DataManager")
+    //private let previewMode: Bool = false
 
-    init() {
-        print("NEW DATA MANAGER")
+    init(previewMode: Bool = false) {
+        print("NEW DATA MANAGER -> previewMode: \(previewMode)")
         documentsDirectory = fileManager.urls(
             for: .documentDirectory,
             in: .userDomainMask
         ).first!
-        Task {
-            do {
-                if try await loadAccountsDocument() {
-                    log.info("loaded local accounts document")
+        if previewMode {
+            setUpPreviewMode()
+        } else {
+            Task {
+                do {
+                    if try await loadAccountsDocument() {
+                        log.info("loaded local accounts document")
+                    }
+                } catch {
+                    log.error(
+                        "problem loading local accounts document: \(error.localizedDescription)"
+                    )
                 }
-            } catch {
-                log.error(
-                    "problem loading local accounts document: \(error.localizedDescription)"
-                )
             }
         }
+    }
+
+    func setUpPreviewMode() {
+        log.info ("setting up preview mode ...")
+        entries = [
+            Account(
+                name: "Acme Login",
+                lastUpdated: "2023-08-18 14:00:25.065893",
+                status: "active",
+                id: 1_665_509_765_428,
+                username: "ritchy",
+                password: "password213",
+                accountNumber: "123-P-234",
+                url: "https://acme.com",
+                email: "",
+                hint: "dinner",
+                notes: "This is for buying all my tools",
+                tags: ["finance", "tools"]
+            )
+        ]
     }
 
     func saveFile(name: String, data: Data) async {

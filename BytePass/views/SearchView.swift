@@ -338,24 +338,7 @@ struct SearchView: View {
         SearchView()
             .environmentObject(
                 {
-                    let manager = DataManager()
-                    //let googleService = GoogleService()
-                    manager.entries = [
-                        Account(
-                            name: "Acme Login",
-                            lastUpdated: "2023-08-18 14:00:25.065893",
-                            status: "active",
-                            id: 1_665_509_765_428,
-                            username: "ritchy",
-                            password: "password213",
-                            accountNumber: "123-P-234",
-                            url: "https://acme.com",
-                            email: "",
-                            hint: "dinner",
-                            notes: "This is for buying all my tools",
-                            tags: ["finance", "tools"]
-                        )
-                    ]
+                    let manager = DataManager(previewMode: true)
                     return manager
                 }()
             )
