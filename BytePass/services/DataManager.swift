@@ -364,13 +364,13 @@ class DataManager: ObservableObject {
     func deleteEntry(_ entry: Account) {
         let index = entries.firstIndex(where: { $0.id == entry.id }) ?? -1
         if index > 0 {
-            //await MainActor.run {
-            //     entries[index].status = "deleted"
-            //     entries[index].lastUpdated = getDateString()
-            // }
-            accountsDocument.deleteEntry(entry: entry)
-            entries.removeAll(where: { $0.id == entry.id })
-            log.info("deleted \(entry.id) - \(entry.name)")
+            Task {
+                await MainActor.run {
+                    accountsDocument.deleteEntry(entry: entry)
+                    entries.removeAll(where: { $0.id == entry.id })
+                    log.info("deleted \(entry.id) - \(entry.name)")
+                }
+            }
             //entries.sorted { $0.name < $1.name }
         } else {
             log.warning(
@@ -378,6 +378,7 @@ class DataManager: ObservableObject {
             )
         }
     }
+
     func reconcileAccounts(incomingAccountsDocument: AccountsDocument) async
         -> Bool
     {
@@ -392,6 +393,12 @@ class DataManager: ObservableObject {
             let entryInLocalCopy = getEntryById(incomingEntry.id)
             //log.info ("got local entry \(String(describing: entryInLocalCopy))")
             if entryInLocalCopy != nil {
+                if incomingEntry.status == "deleted" || entryInLocalCopy?.status == "deleted" {
+                    log.info ("incoming item, \(incomingEntry.name), was deleted, moving to deleted list ...")
+                    deleteEntry(incomingEntry)
+                    changesMadeToIncomingDocument = true
+                    continue
+                }
                 //2023-08-21 14:45:30.456789'
                 //let dateFormatter = ISO8601DateFormatter()
                 let dateFormatter = DateFormatter()
