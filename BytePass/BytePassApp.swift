@@ -35,7 +35,7 @@ struct BytePassApp: App {
 
     init() {
         //print("initialized app delegate...")
-        googleService = GoogleService (dataManager:dataManager)
+        googleService = GoogleService(dataManager: dataManager)
         // Configure app settings
         setupAppSettings()
     }
@@ -98,18 +98,5 @@ struct BytePassApp: App {
                 )
             }
         }
-    }
-}
-
-// hide the keyboard - doesn't work yet
-extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
     }
 }

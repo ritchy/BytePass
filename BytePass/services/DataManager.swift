@@ -39,7 +39,7 @@ class DataManager: ObservableObject {
     }
 
     func setUpPreviewMode() {
-        log.info ("setting up preview mode ...")
+        log.info("setting up preview mode ...")
         entries = [
             Account(
                 name: "Acme Login",
@@ -393,8 +393,12 @@ class DataManager: ObservableObject {
             let entryInLocalCopy = getEntryById(incomingEntry.id)
             //log.info ("got local entry \(String(describing: entryInLocalCopy))")
             if entryInLocalCopy != nil {
-                if incomingEntry.status == "deleted" || entryInLocalCopy?.status == "deleted" {
-                    log.info ("incoming item, \(incomingEntry.name), was deleted, moving to deleted list ...")
+                if incomingEntry.status == "deleted"
+                    || entryInLocalCopy?.status == "deleted"
+                {
+                    log.info(
+                        "incoming item, \(incomingEntry.name), was deleted, moving to deleted list ..."
+                    )
                     deleteEntry(incomingEntry)
                     changesMadeToIncomingDocument = true
                     continue
@@ -639,9 +643,8 @@ class DataManager: ObservableObject {
 
     func searchEntries(query: String) -> [Account] {
         guard !query.isEmpty else { return searchActiveEntries() }
-
         log.info("searching all entries for \(query)")
-        let lowercasedQuery = query.lowercased()
+        let lowercasedQuery = query.lowercased().trim()
         searchResults = entries.filter { entry in
             entry.name.lowercased().contains(lowercasedQuery)
                 || entry.username.lowercased().contains(lowercasedQuery)
