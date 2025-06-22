@@ -23,7 +23,7 @@ struct ResultsView: View {
     var body: some View {
         if (showLoadingScreen) {
             Text("Loading ...")
-        }else if (results.isEmpty) { //}(dataManager.searchResults.isEmpty) {
+        }else if (results.isEmpty) {
             Text("No Results")
         } else {
             NavigationStack {
@@ -34,49 +34,13 @@ struct ResultsView: View {
                         ) {
                             EntryView(accountEntry: entry)
                         }
-                        //.onDisappear() {
-                        //    log.info("onDisappear")
-                         //}
-                        
-                        /**
-                         Button(
-                         action: {
-                         log.info("Tapped on \(entry.name)")
-                         }) {
-                         Image(systemName: "arrow.forward")
-                         //.foregroundColor(.blue)
-                         .frame(width: 48, height: 48)
-                         .padding()
-                         }
-                         **/
                     }
                 }
                 .listStyle(InsetGroupedListStyle())
                 .navigationTitle("\(filterType)")
                 .navigationBarTitleDisplayMode(.inline)
-                //.toolbar {
-                //    ToolbarItem(placement: .navigationBarLeading) {
-                //        Button("Back to Search") {
-                //           dismiss()
-                //       }
-                //   }
-                //}
-            }.onAppear {
-                log.info ("onAppear in ResultsView")
-                refresh()
-                //results = dataManager.searchResults
             }
         }
-    }
-
-    func refresh() {
-        log.info("refresh")
-        //results = []
-        //results[0].name = "blah1".appending(UUID().uuidString)
-        
-        //log.info ("name: \(x?.name ?? "nil")")
-        //x?.name = "blah"
-        //log.info ("name: \(x?.name ?? "nil")")
     }
 }
 
@@ -97,13 +61,6 @@ struct EntryView: View {
                         .fontWeight(.medium)
                     Text(accountEntry.username)
                 }
-
-                //HStack {
-                //    Text("Password:")
-                //        .fontWeight(.medium)
-                //    Text(accountEntry.password)
-                //}
-
                 if !accountEntry.accountNumber.isEmpty {
                     HStack {
                         Text("Account:")
