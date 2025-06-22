@@ -35,7 +35,7 @@ class TagEditorViewModel: ObservableObject {
     }
     
     func addTextTag(tagText: String) {
-        let toAdd = tagText.lowercased()
+        let toAdd = tagText.lowercased().trim()
         if (!selectedTags.contains(toAdd)) {
             tags.append(Tag(name: toAdd))
             allTags.append(toAdd)
