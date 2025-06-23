@@ -246,6 +246,7 @@ class DataManager: ObservableObject {
         )
         .appendingPathComponent("incoming.json")
 
+        /***
         if fileManager.fileExists(atPath: incomingFilePath.path) {
             do {
                 let data = try Data(contentsOf: incomingFilePath)
@@ -259,6 +260,7 @@ class DataManager: ObservableObject {
                 log.error("problem loading incoming file")
             }
         }
+         ***/
         return AccountsDocument(accounts: [])
     }
 
@@ -367,7 +369,8 @@ class DataManager: ObservableObject {
             Task {
                 await MainActor.run {
                     accountsDocument.deleteEntry(entry: entry)
-                    entries.removeAll(where: { $0.id == entry.id })
+                    entries = accountsDocument.accounts
+                    //entries.removeAll(where: { $0.id == entry.id })
                     log.info("deleted \(entry.id) - \(entry.name)")
                 }
             }
@@ -471,23 +474,6 @@ class DataManager: ObservableObject {
             }
         }
 
-        /** not sure we need to process deleted given we're just going off lastUpdated (over field-by-field comparison)
-        log.info("searching for deleted entries ...")
-        let deletedEntries = searchDeletedEntries()
-        for deletedEntry in deletedEntries {
-            log.debug("deleted entry \(deletedEntry)")
-        }
-        log.info("searching for deleted incoming entries ...")
-        let incomingDeleted = searchDeletedEntries(
-            providedEntries: incomingAccountsDocument.passwordEntry
-        )
-        for deletedIncomingEntry in incomingDeleted {
-            log.debug("found incoming entry that was deleted \(deletedIncomingEntry)")
-            var entryInLocalCopy = getEntryById(deletedIncomingEntry.id)
-            entryInLocalCopy?.status = "deleted"  //PasswordEntry.EntryStatus.deleted
-        }
-         */
-
         //now loop through local entries and find any missing in Drive version
         //if we find any, they are new and we simply need to ensure we update Drive copy
         for localEntry in accountsDocument.accounts {
@@ -496,7 +482,15 @@ class DataManager: ObservableObject {
                 localEntry.id,
                 providedEntries: incomingAccountsDocument.accounts
             ) != nil {
-                continue
+                //make sure they weren't deleted
+                if localEntry.status == "deleted" {
+                    log.info(
+                        "local item, \(localEntry.name), was deleted, moving to deleted list ..."
+                    )
+                    deleteEntry(localEntry)
+                    changesMadeToIncomingDocument = true
+                }
+                //continue
             } else {
                 //if not found, flag that changes were made
                 changesMadeToIncomingDocument = true
@@ -504,13 +498,13 @@ class DataManager: ObservableObject {
         }
 
         if changesMadeToLocalDocument {
-            log.info("saving updates to local copy ...")
+            log.info("have updates for local copy from incoming, saving ...")
             accountsDocument.accounts = entries
             _ = await saveAccountsDocument(
                 accountsDocument: self.accountsDocument
             )
         } else {
-            log.info("we have latest, no changes made to local copy")
+            log.info("we have latest, no new incoming changes made to local copy")
         }
         //if both collections contain same item, take the one with latest timestamp
         //if local has item not in incoming, check for 'deleted' items

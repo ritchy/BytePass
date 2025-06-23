@@ -36,6 +36,7 @@ struct AccountDetailView: View {
             await _ = dataManager.saveCurrentAccountsDocument()
         }
     }
+    
     var body: some View {
         if isDeleted {
             VStack {
