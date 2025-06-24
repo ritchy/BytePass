@@ -27,3 +27,13 @@ extension String {
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
 }
+
+extension Date {
+    func currentTimeInMillis() -> Int64 {
+        let currentTimeInMillis = Int64(
+            //seconds since 1970 times 1000
+            NSDate().timeIntervalSince1970 * 1000
+        )
+        return currentTimeInMillis
+    }
+}

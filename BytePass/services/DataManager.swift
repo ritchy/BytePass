@@ -343,7 +343,7 @@ class DataManager: ObservableObject {
             await MainActor.run {
                 entries[index] = entry
             }
-            log.info("replaced \(entry.id) - \(entry.name) - \(entry.notes)")
+            log.info("replaced \(entry.name) - \(entry.id)")
             //entries.sorted { $0.name < $1.name }
         } else {
             log.warning(
@@ -411,55 +411,46 @@ class DataManager: ObservableObject {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS"
                 // log.info("formatting from date '\(passwordEntry.lastUpdated)'")
-                var lastUpdatedDate: Date? = dateFormatter.date(
+                let lastUpdatedDateIncoming: Date? = dateFormatter.date(
                     from: incomingEntry.lastUpdated
                 )
-                if lastUpdatedDate == nil {
+                let lastUpdatedDateLocal: Date? = dateFormatter.date(
+                    from: entryInLocalCopy!.lastUpdated
+                )
+                if lastUpdatedDateIncoming == nil {
                     log.warning(
-                        "Missing date in incoming entry '\(incomingEntry.name)', setting it to 1970 ..."
+                        "Missing date in incoming entry '\(incomingEntry.name)', checking local copy ..."
                     )
-                    let currentTimeInMillis = Int64(
-                        NSDate().timeIntervalSince1970 * 1000
-                    )
-                    let secondsSince1970 = currentTimeInMillis / 1000
-                    lastUpdatedDate = Date(
-                        timeIntervalSince1970: TimeInterval(secondsSince1970)
-                    )
-                    //let lastUpdatedDate =
-                    //    dateFormatter.string(
-                    //        from: date
-                    //    )  //  Convert Date to String
-                    //if (date == nil) {
-                    //    continue
-                    //}
+                    if lastUpdatedDateLocal == nil {
+                        log.info ("lastUpdated is missing or wrong in both incoming and local for \(incomingEntry.name), setting it to now() ..")
+                        changesMadeToLocalDocument = true
+                        changesMadeToIncomingDocument = true
+                        await updateEntry(entryInLocalCopy!)
+                    } else {
+                        log.info ("using local copy given incoming date is wrong, set to update Drive copy ...")
+                        changesMadeToIncomingDocument = true
+                    }
                 }
-                //log.info ("incoming date for \(incomingEntry.name) \(String(describing: lastUpdatedDate))")
-                guard
-                    let incomingLastUpdatedDate: Date = dateFormatter.date(
-                        from: entryInLocalCopy!.lastUpdated
-                    )
-                else {
+                else if lastUpdatedDateLocal == nil {
                     log.warning(
-                        "Missing date in local entry '\(entryInLocalCopy!.name)'"
+                        "Missing date in local entry '\(entryInLocalCopy!.name)', replacing with incoming ..."
                     )
-                    continue
+                    await replaceEntry(incomingEntry)
+                    changesMadeToLocalDocument = true
                 }
-                if incomingLastUpdatedDate == lastUpdatedDate {
+                else if lastUpdatedDateIncoming == lastUpdatedDateLocal {
                     log.debug(
                         "dates same for '\(incomingEntry.name)', no updates"
                     )
 
-                } else if incomingLastUpdatedDate < lastUpdatedDate! {
-                    log.debug(
+                } else if lastUpdatedDateIncoming! > lastUpdatedDateLocal! {
+                    log.info(
                         "incoming, \(incomingEntry.name), later date, replace local entry"
                     )
-                    //Task {
                     await replaceEntry(incomingEntry)
                     changesMadeToLocalDocument = true
-                    //log.info ("replaced? \(getEntryById(passwordEntry.id))")
-                    //}
                 } else {
-                    log.debug(
+                    log.info(
                         "local entry, \(entryInLocalCopy!.name), newer, need to update Drive copy .."
                     )
                     changesMadeToIncomingDocument = true
