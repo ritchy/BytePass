@@ -46,8 +46,8 @@ struct TagButtonView: View {
                 Spacer()
                 //Text(">").padding([.trailing], 0)
 
-            }.padding(.bottom, 0)
-        }
+            }.padding([.leading,.bottom,.trailing], 0)
+        }//.padding(0)
         .padding(10)
         //.foregroundColor(textColor)
         .background(Color.gray.opacity(0.2))
@@ -57,6 +57,7 @@ struct TagButtonView: View {
         //.animation(.spring(response: 0.4, dampingFraction: 0.6))
         .shadow(color: Color(.blue).opacity(0.5), radius: 10, x: 5, y: 5)
         //.frame(maxWidth: .infinity)
+        //.frame(minWidth: 140)
         //.fixedSize()
     }
 

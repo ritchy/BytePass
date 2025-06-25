@@ -134,12 +134,14 @@ struct SearchView: View {
                         }
                              ***/
                     }
-                }
+                }//.padding(0)
+                //.background(Color.red)
                 //.padding(.horizontal)
-            }
+            }//.background(Color.orange)
             Spacer()
         }
-        .padding()
+        //.background(Color.green)
+        //.padding()
         .navigationTitle("BytePass")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

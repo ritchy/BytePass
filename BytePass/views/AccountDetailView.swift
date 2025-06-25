@@ -65,21 +65,21 @@ struct AccountDetailView: View {
 
                     HStack {
                         Text("Account Name:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
-                        Text(selectedAccount.name)
+                        Text(selectedAccount.name)//.fontWeight(.bold).font(.body)
                     }
 
                     HStack {
                         Text("Account Number:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.accountNumber)
                     }
 
                     HStack {
                         Text("URL:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.url)
                     }
@@ -93,25 +93,25 @@ struct AccountDetailView: View {
                 ) {
                     HStack(alignment: .center) {
                         Text("Username:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.username)
                     }
                     HStack {
                         Text("Password:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.password)
                     }
                     HStack {
                         Text("Email:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.email)
                     }
                     HStack {
                         Text("Hint:")
-                            .fontWeight(.medium)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.hint)
                     }

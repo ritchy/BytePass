@@ -21,109 +21,30 @@ struct ResultsView: View {
     }
 
     var body: some View {
-        if (showLoadingScreen) {
+        if showLoadingScreen {
             Text("Loading ...")
-        }else if (results.isEmpty) {
+        } else if results.isEmpty {
             Text("No Results")
         } else {
             NavigationStack {
                 List {
                     ForEach(results) { entry in
                         NavigationLink(
-                            destination: AccountDetailView(selectedAccount: entry, results: $results)
+                            destination: AccountDetailView(
+                                selectedAccount: entry,
+                                results: $results
+                            )
                         ) {
-                            EntryView(accountEntry: entry)
-                        }
+                            ListEntryView(accountEntry: entry)
+                        }.listRowBackground(Color.clear)
                     }
                 }
+                .listRowSpacing(10.0)
                 .listStyle(InsetGroupedListStyle())
                 .navigationTitle("\(filterType)")
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
-    }
-}
-
-struct EntryView: View {
-    let accountEntry: Account
-    init(accountEntry: Account) {
-        self.accountEntry = accountEntry
-    }
-
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(accountEntry.name)
-                    .font(.headline)
-
-                HStack {
-                    Text("Username:")
-                        .fontWeight(.medium)
-                    Text(accountEntry.username)
-                }
-                if !accountEntry.accountNumber.isEmpty {
-                    HStack {
-                        Text("Account:")
-                            .fontWeight(.medium)
-                        Text(accountEntry.accountNumber)
-                    }
-                }
-
-                if !accountEntry.url.isEmpty {
-                    HStack {
-                        Text("URL:")
-                            .fontWeight(.medium)
-                        Text(accountEntry.url)
-                    }
-                }
-
-                if !accountEntry.email.isEmpty {
-                    HStack {
-                        Text("Email:")
-                            .fontWeight(.medium)
-                        Text(accountEntry.email)
-                    }
-                }
-
-                if !accountEntry.hint.isEmpty {
-                    HStack {
-                        Text("Hint:")
-                            .fontWeight(.medium)
-                        Text(accountEntry.hint)
-                    }
-                }
-
-                if !accountEntry.notes.isEmpty {
-                    Text("Notes:")
-                        .fontWeight(.medium)
-                    Text(accountEntry.notes)
-                        .font(.subheadline)
-                        .padding(.leading, 8)
-                }
-
-                if !accountEntry.tags.isEmpty {
-                    HStack {
-                        Text("Tags:")
-                            .fontWeight(.medium)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(accountEntry.tags, id: \.self) { tag in
-                                    Text(tag)
-                                        .font(.caption)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(
-                                            Color.blue.opacity(0.2)
-                                        )
-                                        .cornerRadius(4)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }.padding(.vertical, 8)
-
     }
 }
 
