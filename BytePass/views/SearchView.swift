@@ -65,12 +65,13 @@ struct SearchView: View {
                     }
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
-                            Button() {
+                            Button {
                                 searchIsFocused = false
-                            }
-                            label: {
-                                Text ("Dismiss")
-                                Image(systemName: "keyboard.chevron.compact.down")
+                            } label: {
+                                Text("Dismiss")
+                                Image(
+                                    systemName: "keyboard.chevron.compact.down"
+                                )
                             }
                         }
                     }
@@ -82,9 +83,9 @@ struct SearchView: View {
                         .foregroundColor(.white)
                         .padding(10)
                         .background(Color.blue)
-                        //.background(Color.primary)
+                    //.background(Color.primary)
                 }.disabled(searchText.isEmpty)
-                .cornerRadius(10)
+                    .cornerRadius(10)
             }.padding(.horizontal)
 
             Text("Filter by Tags")
@@ -93,52 +94,22 @@ struct SearchView: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
-                    TagButtonView(text: "all", itemCount: String(dataManager.entries.count))
-                        .onTapGesture {
-                        showSearchingScreen = true
-                        selectedTag = "all"
-                        searchResults = dataManager.sortedByName()
-                        numberOfResults = searchResults.count
-                        showSearchingScreen = false
-                        showingResults = true
-                    }
-
-                    /**
                     Button(action: {
-                        //.authenticationState = .authenticated
                         showSearchingScreen = true
                         selectedTag = "all"
                         searchResults = dataManager.sortedByName()
                         numberOfResults = searchResults.count
                         showSearchingScreen = false
                         showingResults = true
-                    }) {
-                        Text("all")
-                            .fontWeight(.medium)
-                            .foregroundColor(.white)
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 12)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            //.background (background(Color.blue.opacity(0.7)))
-                            //.background(Color.primary)
-                            .cornerRadius(8)
-                    }
-                     **/
+                    }, label: {
+                        TagButtonView(
+                            text: "all",
+                            itemCount: String(dataManager.entries.count)
+                        )
+                    })
                     ForEach(dataManager.getAllTags(), id: \.self) { tag in
-
                         let results = dataManager.filterByTag(tag: tag)
                         //print ("result count for \(tag) is \(results.count)")
-                        TagButtonView(text: tag, itemCount: String(results.count))
-                            .onTapGesture {
-                            selectedTag = tag
-                            showSearchingScreen = true
-                            searchResults = dataManager.filterByTag(tag: tag)
-                            log.info("search results \(searchResults.count)")
-                            showSearchingScreen = false
-                            showingResults = true
-                        }
-                        /***
                         Button(action: {
                             selectedTag = tag
                             showSearchingScreen = true
@@ -146,20 +117,22 @@ struct SearchView: View {
                             log.info("search results \(searchResults.count)")
                             showSearchingScreen = false
                             showingResults = true
-                        }) {
-                            Text(tag)
-                                .fontWeight(.medium)
-                                .foregroundColor(.white)
-                                //.foregroundColor(Color.accentColor)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 12)
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                //.background(Color.primary)
-                                //.background (background(Color.blue.opacity(0.7)))
-                                .cornerRadius(8)
-                        }  //.clipShape(RoundedRectangle(cornerRadius: 4))
-                         ***/
+                        }, label: {
+                            TagButtonView(
+                                text: tag,
+                                itemCount: String(results.count)
+                            )
+                        })
+                            /**
+                        .onTapGesture {
+                            selectedTag = tag
+                            showSearchingScreen = true
+                            searchResults = dataManager.filterByTag(tag: tag)
+                            log.info("search results \(searchResults.count)")
+                            showSearchingScreen = false
+                            showingResults = true
+                        }
+                             ***/
                     }
                 }
                 //.padding(.horizontal)
