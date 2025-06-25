@@ -83,7 +83,6 @@ struct SearchView: View {
                         .padding(10)
                         .background(Color.blue)
                         //.background(Color.primary)
-                        .cornerRadius(10)
                 }.disabled(searchText.isEmpty)
             }.padding(.horizontal)
 
@@ -93,6 +92,17 @@ struct SearchView: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
+                    TagButtonView(text: "all")
+                        .onTapGesture {
+                        showSearchingScreen = true
+                        selectedTag = "all"
+                        searchResults = dataManager.sortedByName()
+                        numberOfResults = searchResults.count
+                        showSearchingScreen = false
+                        showingResults = true
+                    }
+
+                    /**
                     Button(action: {
                         //.authenticationState = .authenticated
                         showSearchingScreen = true
@@ -113,7 +123,19 @@ struct SearchView: View {
                             //.background(Color.primary)
                             .cornerRadius(8)
                     }
+                     **/
                     ForEach(dataManager.getAllTags(), id: \.self) { tag in
+
+                        TagButtonView(text: tag)
+                            .onTapGesture {
+                            selectedTag = tag
+                            showSearchingScreen = true
+                            searchResults = dataManager.filterByTag(tag: tag)
+                            log.info("search results \(searchResults.count)")
+                            showSearchingScreen = false
+                            showingResults = true
+                        }
+                        /***
                         Button(action: {
                             selectedTag = tag
                             showSearchingScreen = true
@@ -134,6 +156,7 @@ struct SearchView: View {
                                 //.background (background(Color.blue.opacity(0.7)))
                                 .cornerRadius(8)
                         }  //.clipShape(RoundedRectangle(cornerRadius: 4))
+                         ***/
                     }
                 }
                 .padding(.horizontal)
