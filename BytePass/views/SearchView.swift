@@ -84,15 +84,16 @@ struct SearchView: View {
                         .background(Color.blue)
                         //.background(Color.primary)
                 }.disabled(searchText.isEmpty)
+                .cornerRadius(10)
             }.padding(.horizontal)
 
             Text("Filter by Tags")
                 .font(.headline)
-                .padding(.top)
+                .padding(0)
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
-                    TagButtonView(text: "all")
+                    TagButtonView(text: "all", itemCount: String(dataManager.entries.count))
                         .onTapGesture {
                         showSearchingScreen = true
                         selectedTag = "all"
@@ -126,7 +127,9 @@ struct SearchView: View {
                      **/
                     ForEach(dataManager.getAllTags(), id: \.self) { tag in
 
-                        TagButtonView(text: tag)
+                        let results = dataManager.filterByTag(tag: tag)
+                        //print ("result count for \(tag) is \(results.count)")
+                        TagButtonView(text: tag, itemCount: String(results.count))
                             .onTapGesture {
                             selectedTag = tag
                             showSearchingScreen = true
@@ -159,7 +162,7 @@ struct SearchView: View {
                          ***/
                     }
                 }
-                .padding(.horizontal)
+                //.padding(.horizontal)
             }
             Spacer()
         }

@@ -15,14 +15,17 @@ import SwiftUI
 
 struct TagButtonView: View {
     let buttonText: String
+    var itemCount: String
     var themeColor: Color = .blue
     var textColor: Color = .black
 
-    init(text: String, themeColor: Color = .blue, textColor: Color = .black) {
+    init(text: String, themeColor: Color = .blue, textColor: Color = .black, itemCount: String = "0") {
         self.buttonText = text
         self.themeColor = themeColor
         self.textColor = textColor
+        self.itemCount = itemCount
     }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
@@ -33,7 +36,7 @@ struct TagButtonView: View {
                     .foregroundColor(.blue)
                     .padding([.top, .leading], 0)
                 Spacer()
-                Text("3").padding(.bottom).padding([.top, .trailing], 0)
+                Text(itemCount).padding(.bottom).padding([.top, .trailing], 0)
             }.padding(0)
             HStack {
                 //Spacer()
@@ -65,7 +68,7 @@ struct TagButtonView: View {
             return "list.star"
         case "property", "home", "house":
             return "house"
-        case "hotel":
+        case "hotel", "hotels":
             return "house.lodge"
         case "music":
             return "music.quarternote.3"
