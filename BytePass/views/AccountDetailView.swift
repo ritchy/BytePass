@@ -198,7 +198,7 @@ struct AccountDetailView: View {
             }
         }
         .onAppear {
-            log.info("onAppear() .. consider dismissing ..")
+            log.debug("onAppear() .. consider dismissing ..")
             considerDismiss()
         }
         .padding(.all, 8)

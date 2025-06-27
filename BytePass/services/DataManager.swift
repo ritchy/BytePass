@@ -667,7 +667,7 @@ class DataManager: ObservableObject {
     }
 
     func filterByTag(tag: String) -> [Account] {
-        log.info("filtering on tag \(tag) with \(entries.count) entries")
+        log.debug("filtering on tag \(tag) with \(entries.count) entries")
         return entries.filter { entry in
             entry.tags.contains(tag)
                 && entry.status == "active"

@@ -114,7 +114,7 @@ struct SearchView: View {
                             selectedTag = tag
                             showSearchingScreen = true
                             searchResults = dataManager.filterByTag(tag: tag)
-                            log.info("search results \(searchResults.count)")
+                            log.debug("pre searching search results \(searchResults.count)")
                             showSearchingScreen = false
                             showingResults = true
                         }, label: {
