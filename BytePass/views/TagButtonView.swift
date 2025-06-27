@@ -19,7 +19,12 @@ struct TagButtonView: View {
     var themeColor: Color = .blue
     var textColor: Color = .black
 
-    init(text: String, themeColor: Color = .blue, textColor: Color = .black, itemCount: String = "0") {
+    init(
+        text: String,
+        themeColor: Color = .blue,
+        textColor: Color = .black,
+        itemCount: String = "0"
+    ) {
         self.buttonText = text
         self.themeColor = themeColor
         self.textColor = textColor
@@ -43,11 +48,14 @@ struct TagButtonView: View {
                 //Label("\(3)", systemImage: getImageName(from: buttonText)).frame(width: 40, height: 40, alignment: .center)
                 Text(buttonText)
                     .font(.headline)
+                    .lineLimit(1)
+                    .allowsTightening(true)
+                    .minimumScaleFactor(0.8)
                 Spacer()
-                //Text(">").padding([.trailing], 0)
+                Text("->").padding(0).font(.footnote)
 
-            }.padding([.leading,.bottom,.trailing], 0)
-        }//.padding(0)
+            }.padding([.leading, .bottom, .trailing], 0)
+        }  //.padding(0)
         .padding(10)
         //.foregroundColor(textColor)
         .background(Color.gray.opacity(0.2))
