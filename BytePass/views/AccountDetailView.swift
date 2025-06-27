@@ -15,6 +15,8 @@ struct AccountDetailView: View {
     @State private var isPresentingEditView = false
     @State var isDeleted: Bool = false
     @Binding var results: [Account]
+    
+    @State var messageToShow: String = "tap any field to copy"
 
     let log = Logger(label: "io.bytestream.bytepass.AccountDetailView")
 
@@ -52,9 +54,28 @@ struct AccountDetailView: View {
         }
     }
 
+    func handleCopy(fieldName:String, textToCopy: String) {
+        if textToCopy.isEmpty || fieldName.isEmpty {
+            showMessage(message: "tap any field to copy")
+            return
+        }
+
+        let pasteboard = UIPasteboard.general
+        pasteboard.string = textToCopy
+        showMessage(message: "\(fieldName) copied to clipboard")
+    }
+
+    func showMessage(message: String) {
+        messageToShow = message
+    }
+
     func getMainView() -> some View {
         VStack(alignment: .center) {
-            Label(selectedAccount.name, systemImage: "storefront")
+            VStack {
+                Label(selectedAccount.name, systemImage: "storefront").padding([.bottom],12).font(.headline)
+                Text(messageToShow) //, systemImage: "doc.on.clipboard")
+                    .fontWeight(.light).font(.caption)
+            }
             List {
                 Section(
                     header: Label(
@@ -68,6 +89,8 @@ struct AccountDetailView: View {
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.name)//.fontWeight(.bold).font(.body)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Account Name", textToCopy: selectedAccount.name)
                     }
 
                     HStack {
@@ -75,6 +98,8 @@ struct AccountDetailView: View {
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.accountNumber)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Account Number", textToCopy: selectedAccount.accountNumber)
                     }
 
                     HStack {
@@ -82,6 +107,8 @@ struct AccountDetailView: View {
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.url)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Account URL", textToCopy: selectedAccount.url)
                     }
 
                 }
@@ -96,24 +123,35 @@ struct AccountDetailView: View {
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.username)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Username", textToCopy: selectedAccount.username)
                     }
+
                     HStack {
                         Text("Password:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.password)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
                     }
+
                     HStack {
                         Text("Email:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.email)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Email", textToCopy: selectedAccount.email)
                     }
+
                     HStack {
                         Text("Hint:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.hint)
+                    }.onTapGesture {
+                        handleCopy(fieldName: "Hint", textToCopy: selectedAccount.hint)
                     }
 
                 }
@@ -129,7 +167,10 @@ struct AccountDetailView: View {
                             .padding(.leading, 8)
 
                     }
+                }.onTapGesture {
+                    handleCopy(fieldName: "Notes", textToCopy: selectedAccount.notes)
                 }
+
                 Section(
                     header: Label(
                         "Tags",
