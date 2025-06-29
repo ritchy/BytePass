@@ -130,14 +130,14 @@ struct AccountDetailView: View {
 
                     HStack {
                         Text("Password:")
-                            .fontWeight(.light).font(.subheadline).background(Color.yellow)
+                            .fontWeight(.light).font(.subheadline)
                         Spacer().background(Color.green).onTapGesture {
                             handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
                         }
-                        Text(passwordText).privacySensitive().background(Color.blue)
+                        Text(passwordText).privacySensitive()
                     }.onTapGesture {
                         handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
-                    }.background(Color.indigo)
+                    }
 
     
                     HStack {
