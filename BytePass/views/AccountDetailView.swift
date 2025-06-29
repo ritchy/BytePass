@@ -12,6 +12,7 @@ struct AccountDetailView: View {
     @EnvironmentObject var dataManager: DataManager
     @Environment(\.dismiss) private var dismiss
     @State var selectedAccount: Account
+    @State var passwordText: String = "******"
     @State private var isPresentingEditView = false
     @State var isDeleted: Bool = false
     @Binding var results: [Account]
@@ -131,11 +132,21 @@ struct AccountDetailView: View {
                         Text("Password:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
-                        Text(selectedAccount.password)
+                        Text(passwordText).privacySensitive()
+                        .onLongPressGesture(
+                            minimumDuration: 1,
+                            maximumDistance: 50,
+                            perform: {
+                                passwordText = selectedAccount.password
+                            },
+                            onPressingChanged: { pressing in
+                                passwordText = "******"
+                            }
+                        )
                     }.onTapGesture {
                         handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
                     }
-
+    
                     HStack {
                         Text("Email:")
                             .fontWeight(.light).font(.subheadline)
