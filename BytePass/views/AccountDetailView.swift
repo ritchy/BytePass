@@ -12,7 +12,7 @@ struct AccountDetailView: View {
     @EnvironmentObject var dataManager: DataManager
     @Environment(\.dismiss) private var dismiss
     @State var selectedAccount: Account
-    @State var passwordText: String = "******"
+    @State var passwordText: String = "********"
     @State private var isPresentingEditView = false
     @State var isDeleted: Bool = false
     @Binding var results: [Account]
@@ -130,22 +130,15 @@ struct AccountDetailView: View {
 
                     HStack {
                         Text("Password:")
-                            .fontWeight(.light).font(.subheadline)
-                        Spacer()
-                        Text(passwordText).privacySensitive()
-                        .onLongPressGesture(
-                            minimumDuration: 1,
-                            maximumDistance: 50,
-                            perform: {
-                                passwordText = selectedAccount.password
-                            },
-                            onPressingChanged: { pressing in
-                                passwordText = "******"
-                            }
-                        )
+                            .fontWeight(.light).font(.subheadline).background(Color.yellow)
+                        Spacer().background(Color.green).onTapGesture {
+                            handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
+                        }
+                        Text(passwordText).privacySensitive().background(Color.blue)
                     }.onTapGesture {
                         handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
-                    }
+                    }.background(Color.indigo)
+
     
                     HStack {
                         Text("Email:")
@@ -165,7 +158,16 @@ struct AccountDetailView: View {
                         handleCopy(fieldName: "Hint", textToCopy: selectedAccount.hint)
                     }
 
-                }
+                }.onLongPressGesture(
+                    minimumDuration: 0.5,
+                    maximumDistance: 50,
+                    perform: {
+                        passwordText = selectedAccount.password
+                    },
+                    onPressingChanged: { pressing in
+                        passwordText = "********"
+                    }
+                )
                 Section(
                     header: Label(
                         "Notes",
