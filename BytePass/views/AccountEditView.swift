@@ -58,7 +58,7 @@ struct AccountEditView: View {
                         )
                     ) {
                         TextField("Username", text: $selectedAccount.username)
-                        TextField("Password", text: $selectedAccount.password)
+                        SecureField("Password", text: $selectedAccount.password)
                         TextField("Email", text: $selectedAccount.email).keyboardType(.emailAddress)
                         TextField("Hint", text: $selectedAccount.hint).scrollDismissesKeyboard(.immediately)
                     }
