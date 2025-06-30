@@ -241,10 +241,13 @@ struct AccountDetailView: View {
         ) {
             NavigationStack {
                 AccountEditView(selectedAccount: $selectedAccount)
-                    //.navigationTitle(selectedAccount.name)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
+                                let orig = dataManager.getEntryById(selectedAccount.id)
+                                if orig != nil {
+                                    selectedAccount = orig!
+                                }
                                 isPresentingEditView = false
                             }
                         }

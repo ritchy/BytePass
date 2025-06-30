@@ -14,8 +14,6 @@ struct AccountEditView: View {
     @State var isPresentingTagView: Bool = false
     @State var showPassword: Bool = false
     
-    //var tagEditorView: TagEditorView?
-
     let log = Logger(label: "io.bytestream.bytepass.AccountEditView")
 
     /**
