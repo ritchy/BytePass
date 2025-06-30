@@ -265,9 +265,6 @@ struct AccountDetailView: View {
                                     log.info(
                                         "account changed, need to save ..."
                                     )
-                                    //orig?.hint = "hinttty"
-                                    //var x = dataManager.searchResults.first
-                                    //x?.hint = "hinttty"
                                     let index = results.firstIndex(where: {
                                         $0.id == selectedAccount.id
                                     })
