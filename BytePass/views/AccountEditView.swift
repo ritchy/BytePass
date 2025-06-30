@@ -12,6 +12,7 @@ struct AccountEditView: View {
     @EnvironmentObject var dataManager: DataManager
     @Binding var selectedAccount: Account
     @State var isPresentingTagView: Bool = false
+    @State var showPassword: Bool = false
     
     //var tagEditorView: TagEditorView?
 
@@ -58,7 +59,20 @@ struct AccountEditView: View {
                         )
                     ) {
                         TextField("Username", text: $selectedAccount.username)
-                        SecureField("Password", text: $selectedAccount.password)
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $selectedAccount.password)
+                            } else {
+                                SecureField("Password", text: $selectedAccount.password)
+                            }
+                            Spacer()
+                            Button(action: {
+                                showPassword = !showPassword
+                            }) {
+                                let imageName = showPassword ? "eye" : "eye.slash"
+                                Image (systemName: imageName)
+                            }
+                        }
                         TextField("Email", text: $selectedAccount.email).keyboardType(.emailAddress)
                         TextField("Hint", text: $selectedAccount.hint).scrollDismissesKeyboard(.immediately)
                     }
