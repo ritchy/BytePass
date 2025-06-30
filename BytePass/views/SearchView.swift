@@ -14,9 +14,11 @@ struct SearchView: View {
     @State private var currentSearchText = ""
     @State private var numberOfResults: Int = 0
     @State private var showSyncingScreen: Bool = false
+    @State private var showSignOutScreen: Bool = false
     @State private var showingResults = false
     @State private var showSearchingScreen: Bool = false
     @State private var isPresentingNewAccountView: Bool = false
+    @State private var signedIn: Bool = false
     @FocusState private var searchIsFocused: Bool
     @State var newAccount: Account = Account.emptyAccount
 
@@ -27,7 +29,8 @@ struct SearchView: View {
     let log = Logger(label: "io.bytestream.bytepass.SearchView")
 
     private let columns = [
-        GridItem(.adaptive(minimum: 150, maximum: 150), spacing: 10)
+        GridItem(.adaptive(minimum: 150, maximum: 190), spacing: 10)
+        //GridItem(.flexible(minimum: 150, maximum: 180), spacing: 0)
         //GridItem(.fixed(100), spacing: 10)
     ]
 
@@ -39,6 +42,8 @@ struct SearchView: View {
             Text("Searching ...")
         } else if showSyncingScreen {
             Text("Syncing ...")
+        } else if showSignOutScreen {
+            Text("Signing out ...")
         } else {
             searchView()
         }
@@ -94,50 +99,48 @@ struct SearchView: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
-                    Button(action: {
-                        showSearchingScreen = true
-                        selectedTag = "all"
-                        searchResults = dataManager.sortedByName()
-                        numberOfResults = searchResults.count
-                        showSearchingScreen = false
-                        showingResults = true
-                    }, label: {
-                        TagButtonView(
-                            text: "all",
-                            itemCount: String(dataManager.entries.count)
-                        )
-                    })
+                    Button(
+                        action: {
+                            showSearchingScreen = true
+                            selectedTag = "all"
+                            searchResults = dataManager.sortedByName()
+                            numberOfResults = searchResults.count
+                            showSearchingScreen = false
+                            showingResults = true
+                        },
+                        label: {
+                            TagButtonView(
+                                text: "all",
+                                itemCount: String(dataManager.entries.count)
+                            )
+                        }
+                    )
                     ForEach(dataManager.getAllTags(), id: \.self) { tag in
                         let results = dataManager.filterByTag(tag: tag)
                         //print ("result count for \(tag) is \(results.count)")
-                        Button(action: {
-                            selectedTag = tag
-                            showSearchingScreen = true
-                            searchResults = dataManager.filterByTag(tag: tag)
-                            log.debug("pre searching search results \(searchResults.count)")
-                            showSearchingScreen = false
-                            showingResults = true
-                        }, label: {
-                            TagButtonView(
-                                text: tag,
-                                itemCount: String(results.count)
-                            )
-                        })
-                            /**
-                        .onTapGesture {
-                            selectedTag = tag
-                            showSearchingScreen = true
-                            searchResults = dataManager.filterByTag(tag: tag)
-                            log.info("search results \(searchResults.count)")
-                            showSearchingScreen = false
-                            showingResults = true
-                        }
-                             ***/
+                        Button(
+                            action: {
+                                selectedTag = tag
+                                showSearchingScreen = true
+                                searchResults = dataManager.filterByTag(
+                                    tag: tag
+                                )
+                                log.debug(
+                                    "pre searching search results \(searchResults.count)"
+                                )
+                                showSearchingScreen = false
+                                showingResults = true
+                            },
+                            label: {
+                                TagButtonView(
+                                    text: tag,
+                                    itemCount: String(results.count)
+                                )
+                            }
+                        )
                     }
-                }//.padding(0)
-                //.background(Color.red)
-                //.padding(.horizontal)
-            }//.background(Color.orange)
+                }.padding()
+            }
             Spacer()
         }
         //.background(Color.green)
@@ -228,6 +231,7 @@ struct SearchView: View {
             Task {
                 searchResults = dataManager.sortedByName()
                 numberOfResults = searchResults.count
+                await checkSignedIn()
             }
         }
         //.analyticsScreen(name: "\(SearchView.self)")
@@ -254,43 +258,77 @@ struct SearchView: View {
 
         if await !googleService.isSignedIn() {
             //await googleService.handleSync()
-            signInWithGoogleService()
-        } else if await googleService.isSignedIn() {
+            log.info(
+                "not signed in, need to sign into google drive ..."
+            )
+            await signInWithGoogleService()
+            //await googleService.handleSync()
+        }
+
+        if await googleService.isSignedIn() {
             log.info("signed in, syncing with google drive ...")
             await googleService.handleSync()
         } else {
-            switch authViewModel.state {
-            case .signedIn:
-                log.info(
-                    "signed in through googlesignIn, syncing with google drive ..."
-                )
-                await googleService.handleSync()
-            case .signedOut:
-                log.info("need to sign into google ..")
-                do {
-                    try await googleService.signIn()
-                } catch {
-                    log.error(
-                        "googleservice signin failure",
-                        metadata: [
-                            "error": "\(error)",
-                            "localizedDescription":
-                                "\(error.localizedDescription)",
-                        ]
-                    )
-                }
-            //authViewModel.signIn()
-            }
+            log.info ("logged out, skipping syncing for now")
         }
 
     }
 
-    private func signInWithGoogleService() {
-        Task {
-            //let googleService = GoogleService()
-            try await googleService.signIn()
-            dismiss()
+    private func signInWithAuth() async {
+        switch authViewModel.state {
+        case .signedIn:
+            log.info(
+                "signed in through googlesignIn, syncing with google drive ..."
+            )
+            await googleService.handleSync()
+        case .signedOut:
+            log.info("need to sign into google ..")
+            do {
+                try await googleService.signIn()
+            } catch {
+                log.error(
+                    "googleservice signin failure",
+                    metadata: [
+                        "error": "\(error)",
+                        "localizedDescription":
+                            "\(error.localizedDescription)",
+                    ]
+                )
+            }
+        //authViewModel.signIn()
         }
+    }
+
+    private func signInWithGoogleService() async {
+        //let googleService = GoogleService()
+        do {
+           try await googleService.signIn()
+        } catch {
+            log.error(
+                "googleservice signin failure",
+                metadata: [
+                    "error": "\(error)",
+                    "localizedDescription":
+                        "\(error.localizedDescription)",
+                ]
+            )
+        }
+        await checkSignedIn()
+        //dismiss()
+    }
+
+    private func signOutWithGoogleService() {
+        showSignOutScreen = true
+        Task {
+            try await googleService.signOut()
+            try await Task.sleep(nanoseconds: 350_000_000)
+            await checkSignedIn()
+            showSignOutScreen = false
+        }
+    }
+
+    private func checkSignedIn() async {
+        signedIn = await googleService.isSignedIn()
     }
 
     func syncButton() -> some View {
@@ -310,6 +348,14 @@ struct SearchView: View {
                 do {
                     log.info("handling REDIRECT ...")
                     _ = try await googleService.handleRedirect(url: url)
+                    await checkSignedIn()
+                    //log.info("back from redirect? logged in? \(signedIn)")
+                    if signedIn {
+                        log.info("now we signed in! syncing with google drive ...")
+                        await googleService.handleSync()
+                    } else {
+                        log.info ("still logged out after redirect, skipping sync this time")
+                    }
                 } catch {
                     log.error(
                         "Auth.HandleRedirect failure",
@@ -325,11 +371,11 @@ struct SearchView: View {
     }
 
     func signOutButton() -> some View {
-        Button(action: { authViewModel.signOut() }) {
+        Button(action: { signOutWithGoogleService() }) {
             Text("Signout")
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.bordered)
-        }
+        }.disabled(signedIn == false)
     }
 
 }
