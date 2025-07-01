@@ -38,6 +38,15 @@ struct SearchView: View {
     }
 
     var body: some View {
+        /**
+        if (dataManager.entries.isEmpty) {
+            Button {
+                isPresentingNewAccountView = true
+            } label: {
+                NoEntryView()
+            }
+        } else
+        **/
         if showSearchingScreen {
             Text("Searching ...")
         } else if showSyncingScreen {
@@ -61,85 +70,96 @@ struct SearchView: View {
 
     func searchView() -> some View {
         VStack(spacing: 20) {
-            HStack {
-                TextField("Search", text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true).onSubmit {
-                        performSearch()
-                    }
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Button {
-                                searchIsFocused = false
-                            } label: {
-                                Text("Dismiss")
-                                Image(
-                                    systemName: "keyboard.chevron.compact.down"
-                                )
+            if (dataManager.entries.isEmpty) {
+                Spacer()
+                Button {
+                    isPresentingNewAccountView = true
+                } label: {
+                    NoEntryView()
+                }
+                Spacer()
+            }
+            else {
+                HStack {
+                    TextField("Search", text: $searchText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true).onSubmit {
+                            performSearch()
+                        }
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Button {
+                                    searchIsFocused = false
+                                } label: {
+                                    Text("Dismiss")
+                                    Image(
+                                        systemName: "keyboard.chevron.compact.down"
+                                    )
+                                }
                             }
                         }
-                    }
-                    .focused($searchIsFocused)
-                Button(action: {
-                    performSearch()
-                }) {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.white)
-                        .padding(10)
-                        .background(Color.blue)
-                    //.background(Color.primary)
-                }.disabled(searchText.isEmpty)
-                    .cornerRadius(10)
-            }.padding(.horizontal)
-
-            Text("Filter by Tags")
-                .font(.headline)
-                .padding(0)
-
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 10) {
-                    Button(
-                        action: {
-                            showSearchingScreen = true
-                            selectedTag = "all"
-                            searchResults = dataManager.sortedByName()
-                            numberOfResults = searchResults.count
-                            showSearchingScreen = false
-                            showingResults = true
-                        },
-                        label: {
-                            TagButtonView(
-                                text: "all",
-                                itemCount: String(dataManager.entries.count)
-                            )
-                        }
-                    )
-                    ForEach(dataManager.getAllTags(), id: \.self) { tag in
-                        let results = dataManager.filterByTag(tag: tag)
-                        //print ("result count for \(tag) is \(results.count)")
+                        .focused($searchIsFocused)
+                    Button(action: {
+                        performSearch()
+                    }) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.white)
+                            .padding(10)
+                            .background(Color.blue)
+                        //.background(Color.primary)
+                    }.disabled(searchText.isEmpty)
+                        .cornerRadius(10)
+                }.padding(.horizontal)
+                
+                Text("Filter by Tags")
+                    .font(.headline)
+                    .padding(0)
+                
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 10) {
                         Button(
                             action: {
-                                selectedTag = tag
                                 showSearchingScreen = true
-                                searchResults = dataManager.filterByTag(
-                                    tag: tag
-                                )
-                                log.debug(
-                                    "pre searching search results \(searchResults.count)"
-                                )
+                                selectedTag = "all"
+                                searchResults = dataManager.sortedByName()
+                                numberOfResults = searchResults.count
                                 showSearchingScreen = false
                                 showingResults = true
                             },
                             label: {
                                 TagButtonView(
-                                    text: tag,
-                                    itemCount: String(results.count)
+                                    text: "all",
+                                    itemCount: String(dataManager.entries.count)
                                 )
                             }
                         )
-                    }
-                }.padding()
+                        ForEach(dataManager.getAllTags(), id: \.self) { tag in
+                            let results = dataManager.filterByTag(tag: tag)
+                            //print ("result count for \(tag) is \(results.count)")
+                            Button(
+                                action: {
+                                    selectedTag = tag
+                                    showSearchingScreen = true
+                                    searchResults = dataManager.filterByTag(
+                                        tag: tag
+                                    )
+                                    log.debug(
+                                        "pre searching search results \(searchResults.count)"
+                                    )
+                                    showSearchingScreen = false
+                                    showingResults = true
+                                },
+                                label: {
+                                    TagButtonView(
+                                        text: tag,
+                                        itemCount: String(results.count)
+                                    )
+                                }
+                            )
+                        }
+                    }.padding()
+                }
             }
             Spacer()
         }
@@ -269,7 +289,7 @@ struct SearchView: View {
             log.info("signed in, syncing with google drive ...")
             await googleService.handleSync()
         } else {
-            log.info ("logged out, skipping syncing for now")
+            log.info("logged out, skipping syncing for now")
         }
 
     }
@@ -302,7 +322,7 @@ struct SearchView: View {
     private func signInWithGoogleService() async {
         //let googleService = GoogleService()
         do {
-           try await googleService.signIn()
+            try await googleService.signIn()
         } catch {
             log.error(
                 "googleservice signin failure",
@@ -351,10 +371,14 @@ struct SearchView: View {
                     await checkSignedIn()
                     //log.info("back from redirect? logged in? \(signedIn)")
                     if signedIn {
-                        log.info("now we signed in! syncing with google drive ...")
+                        log.info(
+                            "now we signed in! syncing with google drive ..."
+                        )
                         await googleService.handleSync()
                     } else {
-                        log.info ("still logged out after redirect, skipping sync this time")
+                        log.info(
+                            "still logged out after redirect, skipping sync this time"
+                        )
                     }
                 } catch {
                     log.error(
