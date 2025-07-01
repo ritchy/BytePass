@@ -38,15 +38,6 @@ struct SearchView: View {
     }
 
     var body: some View {
-        /**
-        if (dataManager.entries.isEmpty) {
-            Button {
-                isPresentingNewAccountView = true
-            } label: {
-                NoEntryView()
-            }
-        } else
-        **/
         if showSearchingScreen {
             Text("Searching ...")
         } else if showSyncingScreen {
@@ -111,6 +102,7 @@ struct SearchView: View {
                     }.disabled(searchText.isEmpty)
                         .cornerRadius(10)
                 }.padding(.horizontal)
+                .padding([.top], 20)
                 
                 Text("Filter by Tags")
                     .font(.headline)
