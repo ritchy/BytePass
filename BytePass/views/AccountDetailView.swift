@@ -134,7 +134,7 @@ struct AccountDetailView: View {
                         Spacer().background(Color.green).onTapGesture {
                             handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
                         }
-                        Text(passwordText).privacySensitive()
+                        Text(selectedAccount.password.isEmpty ? "(None)" : passwordText).privacySensitive()
                     }.onTapGesture {
                         handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
                     }
