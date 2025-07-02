@@ -1,0 +1,150 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "->" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ deleted" : {
+
+    },
+    "%lld" : {
+
+    },
+    "<manage>" : {
+
+    },
+    "Account Details" : {
+
+    },
+    "Account Information" : {
+
+    },
+    "Account Name" : {
+
+    },
+    "Account Name:" : {
+
+    },
+    "Account Number" : {
+
+    },
+    "Account Number:" : {
+
+    },
+    "Add a Tag" : {
+
+    },
+    "Are you sure you want to delete %@?" : {
+
+    },
+    "BytePass" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Confirm Delete" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Dismiss" : {
+
+    },
+    "Done" : {
+
+    },
+    "Edit" : {
+
+    },
+    "Email" : {
+
+    },
+    "Email:" : {
+
+    },
+    "Filter by Tags" : {
+
+    },
+    "Hello, world!" : {
+
+    },
+    "Hint" : {
+
+    },
+    "Hint:" : {
+
+    },
+    "Home" : {
+
+    },
+    "Loading ..." : {
+
+    },
+    "Manage Tags" : {
+
+    },
+    "no entries, tap here to add one!" : {
+
+    },
+    "No Results" : {
+
+    },
+    "Notes" : {
+
+    },
+    "Password" : {
+
+    },
+    "Password:" : {
+
+    },
+    "Personal Information" : {
+
+    },
+    "Search" : {
+
+    },
+    "Searching ..." : {
+
+    },
+    "Signing out ..." : {
+
+    },
+    "Signout" : {
+
+    },
+    "Sync" : {
+
+    },
+    "Syncing ..." : {
+
+    },
+    "Tags" : {
+
+    },
+    "Tags:" : {
+
+    },
+    "URL" : {
+
+    },
+    "URL:" : {
+
+    },
+    "Username" : {
+
+    },
+    "Username:" : {
+
+    },
+    "Yes, Delete" : {
+
+    }
+  },
+  "version" : "1.0"
+}
