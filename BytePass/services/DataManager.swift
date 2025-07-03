@@ -27,7 +27,7 @@ class DataManager: ObservableObject {
             Task {
                 do {
                     if try await loadAccountsDocument() {
-                        log.info("loaded local accounts document")
+                        log.debug("loaded local accounts document")
                     }
                 } catch {
                     log.error(
