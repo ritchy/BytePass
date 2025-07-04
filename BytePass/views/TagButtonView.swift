@@ -99,6 +99,8 @@ struct TagButtonView: View {
             return "laptopcomputer"
         case "entertainment", "streaming":
             return "play.tv"
+        case "wifi", "internet":
+            return "wifi"
         default:
             var toReturn = String(from.first ?? "x")
             toReturn += ".circle"
