@@ -1,8 +1,9 @@
 //
 //  AccountEditView.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 6/3/25.
+//
+//  This view is basically a form showing all the potential
+//  Account entry values, allowing user to update and save.
 //
 
 import Logging

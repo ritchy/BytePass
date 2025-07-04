@@ -1,15 +1,10 @@
 //
 //  TagButtonView.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 6/24/25.
-//
-
-//
-//  CardView.swift
-//  BytePass
-//
-//  Created by Robert Ritchy on 6/4/25.
+//  This is the content view of the buttons shown in Search View
+//  which is basically our landing/home page. Each button is associated
+//  with a tag value and the action takes you to a results view showing all
+//  entries containing the associated tag.
 //
 import SwiftUI
 

@@ -1,8 +1,8 @@
 //
 //  CardView.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 6/4/25.
+//  This view isn't currently used, but leveraged for future reference
+//  for potential a Button content view or in a grid layout.
 //
 import SwiftUI
 

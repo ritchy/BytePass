@@ -1,3 +1,10 @@
+//
+// ResultsView
+//
+// This view is a list of search results based on either
+// a free text search or all items associated with a tag.
+//
+
 import Logging
 import SwiftUI
 

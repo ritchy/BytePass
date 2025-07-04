@@ -2,7 +2,7 @@
 //  NoEntryView.swift
 //  BytePass
 //
-//  Created by Robert Ritchy on 6/30/25.
+//  Shown when there are zero account entries, typically first time use.
 //
 import SwiftUI
 

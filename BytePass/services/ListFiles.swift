@@ -1,8 +1,10 @@
 //
 //  ListFiles.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 5/16/25.
+//  Taken from GoogleDriveClient project in github and in place to work towards
+//  cleaner separation from general authentication and networking libraries.
+//  Not currently used, but may introduce if we expand our needs with
+//  Google APIs.
 //
 
 import Foundation

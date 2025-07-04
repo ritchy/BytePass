@@ -1,3 +1,10 @@
+//
+// DataManager
+//
+// This service is in place to manage locally stored files and helper
+// functions for manipulating the data associated with these files.
+//
+
 import CryptoKit
 import Foundation
 import Logging

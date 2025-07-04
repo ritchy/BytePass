@@ -2,7 +2,8 @@
 //  DetailView.swift
 //  BytePass
 //
-//  Created by Robert Ritchy on 6/3/25.
+//  An expanded, more detailed view of a single account item and
+//  all it's values.
 //
 
 import Logging

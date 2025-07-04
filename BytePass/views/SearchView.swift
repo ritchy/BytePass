@@ -1,3 +1,11 @@
+//
+// SearchView
+//
+// This is basically the home/landing page showing the
+// main search bar and all the tag groupings to click/search
+// based on a tag
+//
+
 //import FirebaseAnalytics
 import GoogleDriveClient
 import Logging

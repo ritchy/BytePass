@@ -1,8 +1,8 @@
 //
 //  GoogleServicesAuthenticator.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 5/14/25.
+//  Taken from Google tutorial to support user login into
+//  their Google account.
 //
 
 import Foundation

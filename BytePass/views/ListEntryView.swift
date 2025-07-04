@@ -1,8 +1,7 @@
 //
 //  ListEntryView.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 6/25/25.
+//  This view shows a summary of a single account entry as expected in a scrollable list.
 //
 import Logging
 import SwiftUI

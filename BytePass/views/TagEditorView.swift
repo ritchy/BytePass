@@ -1,8 +1,9 @@
 //
 //  TagEditorView.swift
-//  BytePass
 //
-//  Created by Robert Ritchy on 6/19/25
+//  View providing ability to manage tags associated with an
+//  Account entry. There's a drop down select for using existing
+//  tags and the ability to add a new tag.
 //
 
 import SwiftUI

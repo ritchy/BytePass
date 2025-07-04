@@ -1,6 +1,8 @@
 //
 //  GoogleService.swift
-//  BytePass
+//
+//  Service for interacting with the Google Drive API to upload,
+//  download and save files in Drive.
 //
 
 import Foundation
