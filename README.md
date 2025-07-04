@@ -1,13 +1,13 @@
 # BytePass
 Password Management IOS App
 
+
 Dark Mode
 
-| ![home page](images/bytepass-home-page-dark.png)  | ![search results](images/bytepass-results-list-view-dark.png) | ![account details](images/bytepass-account-detailed-view-dark.png) |
+<img src="images/bytepass-home-page-dark.png" width="300" height="580"/> -> <img src="images/bytepass-results-list-view-dark.png" width="290"  height="580" /> ->  <img src="images/bytepass-account-detailed-view-dark.png" width="300" height="580" /> 
+
 
 Light Mode
 
-| ![home page](images/bytepass-home-page.png) | ![search results](images/bytepass-results-list-view.png) | ![account details](images/bytepass-account-detailed-view.png) |
-
-
+<img src="images/bytepass-home-page.png" width="295"/> -> <img src="images/bytepass-results-list-view.png" width="300" /> ->  <img src="images/bytepass-account-detailed-view.png" width="295" /> 
 
