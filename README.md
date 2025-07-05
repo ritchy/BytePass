@@ -1,6 +1,7 @@
 # BytePass
 Password Management IOS App
 
+Current state needs UI/UX work, but completely functional.
 
 Dark Mode
 
