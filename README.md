@@ -54,3 +54,24 @@ the 'redirect URI'provided by Google.
 ![URL Type](images/project-url-type.png)
 
 
+This creates an Info.plist file with the following contents (redirectURI):
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.(redirectURI)/string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
+```
