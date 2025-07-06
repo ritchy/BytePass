@@ -1,5 +1,12 @@
 # BytePass
-Password Management IOS App
+
+## Password Management IOS App
+
+Basic account management with online accounts and keeping track of login information
+like user/passwords. Provides a syncing capability so that you can share this account
+information with multiple devices leveraging your personal Google Drive account. This
+data is only stored locally on the device and in app data folders on Google Drive,
+nowhere else.
 
 Current state needs UI/UX work, but completely functional.
 
@@ -12,6 +19,10 @@ Dark Mode
 <img src="images/bytepass-home-page-dark.png" width="250" height="580"/> -> <img src="images/bytepass-results-list-view-dark.png" width="235" /> ->  <img src="images/bytepass-account-detailed-view-dark.png" border="1" width="235" /> 
 
 
+## Getting Started with Development
+
+After cloning this repo, you'll want to set up integration with Google Drive
+so that the 'sync' button works.
 
 Currently using swift-google-drive-client to integrate with GoogleDrive, 
 but working on alternative approaches as well. For existing
@@ -41,3 +52,5 @@ keeping in mind that you only fill out 'URL Schemes' (nothing else) with value f
 the 'redirect URI'provided by Google.
 
 ![URL Type](images/project-url-type.png)
+
+
