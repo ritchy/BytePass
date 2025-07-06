@@ -216,7 +216,7 @@ struct AccountDetailView: View {
             log.debug("onAppear() .. consider dismissing ..")
             considerDismiss()
         }
-        .foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+        .foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
         .padding(.all, 8)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -244,7 +244,7 @@ struct AccountDetailView: View {
         ) {
             NavigationStack {
                 AccountEditView(selectedAccount: $selectedAccount)
-                    .foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                    .foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {

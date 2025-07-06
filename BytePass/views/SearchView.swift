@@ -44,6 +44,7 @@ struct SearchView: View {
     ]
 
     init() {
+        //UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.blue]
     }
 
     var body: some View {
@@ -70,7 +71,7 @@ struct SearchView: View {
 
     func searchView() -> some View {
         VStack(spacing: 20) {
-            if (dataManager.entries.isEmpty) {
+            if dataManager.entries.isEmpty {
                 Spacer()
                 Button {
                     isPresentingNewAccountView = true
@@ -78,8 +79,7 @@ struct SearchView: View {
                     NoEntryView()
                 }
                 Spacer()
-            }
-            else {
+            } else {
                 HStack {
                     TextField("Search", text: $searchText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -94,7 +94,8 @@ struct SearchView: View {
                                 } label: {
                                     Text("Dismiss")
                                     Image(
-                                        systemName: "keyboard.chevron.compact.down"
+                                        systemName:
+                                            "keyboard.chevron.compact.down"
                                     )
                                 }
                             }
@@ -106,17 +107,21 @@ struct SearchView: View {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.white)
                             .padding(10)
-                            .background(colorScheme == .dark ? darkForeground : lightForeground)
+                            .background(
+                                colorScheme == .dark
+                                    ? darkForegroundColor : lightForegroundColor
+                            )
                         //.background(Color.primary)
                     }.disabled(searchText.isEmpty)
                         .cornerRadius(10)
                 }.padding(.horizontal)
-                .padding([.top], 20)
-                
+                    .padding([.top], 20)
+
                 Text("Filter by Tags")
                     .font(.headline)
                     .padding(0)
-                
+                    .foregroundColor(getForegroundColor())
+
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 10) {
                         Button(
@@ -225,6 +230,9 @@ struct SearchView: View {
                         }
                     }
             }
+            //.toolbarColorScheme(.dark)
+            //.toolbarBackground(Color.gray)
+
         }
         .fullScreenCover(isPresented: $showingResults) {
             NavigationStack {
@@ -257,6 +265,15 @@ struct SearchView: View {
         }
         //.analyticsScreen(name: "\(SearchView.self)")
 
+    }
+
+    func getForegroundColor() -> Color {
+        return colorScheme == .dark ? darkForegroundColor : lightForegroundColor
+    }
+
+    func getPlaceholderColor() -> Color {
+        return colorScheme == .dark
+            ? darkPlaceholderColor : lightPlaceholderColor
     }
 
     private func handleSync() async {

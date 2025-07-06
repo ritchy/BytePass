@@ -15,7 +15,7 @@ struct AccountEditView: View {
     @Binding var selectedAccount: Account
     @State var isPresentingTagView: Bool = false
     @State var showPassword: Bool = false
-    
+
     let log = Logger(label: "io.bytestream.bytepass.AccountEditView")
 
     /**
@@ -41,7 +41,7 @@ struct AccountEditView: View {
                         header: Label(
                             "Account Information",
                             systemImage: "storefront"
-                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                        ).foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
 
                     ) {
                         getTextField(placeholder: "Account Name", text: $selectedAccount.name)
@@ -56,7 +56,7 @@ struct AccountEditView: View {
                         header: Label(
                             "Personal Information",
                             systemImage: "person"
-                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                        ).foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
                     ) {
                         getTextField(placeholder: "Username", text: $selectedAccount.username)
                         HStack {
@@ -82,7 +82,7 @@ struct AccountEditView: View {
                         header: Label(
                             "Notes",
                             systemImage: "note.text"
-                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                        ).foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
                     ) {
                         TextField(
                             "Notes",
@@ -97,13 +97,13 @@ struct AccountEditView: View {
                         header: Label(
                             "Tags",
                             systemImage: "tag"
-                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                        ).foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
                     ) {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 Button("<manage>") {
                                     isPresentingTagView = true
-                                }.foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                                }.foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
 
                                 ForEach(selectedAccount.tags, id: \.self) {
                                     tag in

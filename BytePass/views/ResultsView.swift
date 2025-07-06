@@ -49,11 +49,16 @@ struct ResultsView: View {
                 }
                 .listRowSpacing(10.0)
                 .listStyle(InsetGroupedListStyle())
-                .navigationTitle("\(filterType)")
+                .navigationTitle("\(filterType)").foregroundColor(
+                    getForegroundColor()
+                )
                 .navigationBarTitleDisplayMode(.inline)
-                .foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+                .foregroundColor(getForegroundColor())
             }
         }
+    }
+    func getForegroundColor() -> Color {
+        return colorScheme == .dark ? darkForegroundColor : lightForegroundColor
     }
 }
 

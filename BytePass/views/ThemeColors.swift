@@ -12,7 +12,7 @@
 //  grayBlue = Color(red: 0.6511003971, green: 0.806196034, blue: 1, alpha: 1)
 import SwiftUI
 
-let darkForeground = Color(red: 0.3858798742, green: 0.6190284491, blue: 1)
-let lightForeground = Color(red: 0, green: 0.3759868145, blue: 1)
-let darkPlaceholderColor = darkForeground.opacity(0.5)
-let lightPlaceholderColor = lightForeground.opacity(0.5)
+let darkForegroundColor = Color(red: 0.3858798742, green: 0.6190284491, blue: 1)
+let lightForegroundColor = Color(red: 0, green: 0.3759868145, blue: 1)
+let darkPlaceholderColor = darkForegroundColor.opacity(0.5)
+let lightPlaceholderColor = lightForegroundColor.opacity(0.5)
