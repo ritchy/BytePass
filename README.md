@@ -16,7 +16,7 @@ Light Mode
 
 Dark Mode
 
-<img src="images/bytepass-home-page-dark.png" width="250" height="580"/> -> <img src="images/bytepass-results-list-view-dark.png" width="235" /> ->  <img src="images/bytepass-account-detailed-view-dark.png" border="1" width="235" /> 
+<img src="images/bytepass-home-page-dark.png" width="260" /> -> <img src="images/bytepass-results-list-view-dark.png" width="245" /> ->  <img src="images/bytepass-account-detailed-view-dark.png" border="1" width="245" /> 
 
 
 ## Getting Started with Development
