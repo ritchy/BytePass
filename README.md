@@ -26,8 +26,8 @@ so that the 'sync' button works.
 
 Currently using swift-google-drive-client to integrate with GoogleDrive, 
 but working on alternative approaches as well. For existing
-approach, you need to configure the OAuth 2.0 Client ID using 
-[Google Cloud Console](https://console.cloud.google.com/). Use `iOS` application type.
+approach, you need to configure the OAuth 2.0 Client ID (selecting  `iOS` application type) 
+using [Google Cloud Console](https://console.cloud.google.com/).
 
 After cloning this repo, you need to add the following code somewhere with client ID provided in setup. For example, you can create a file named GoogleClientConfig.swift and paste there
 
