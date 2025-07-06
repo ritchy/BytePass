@@ -11,6 +11,7 @@ import SwiftUI
 
 struct AccountEditView: View {
     @EnvironmentObject var dataManager: DataManager
+    @Environment(\.colorScheme) var colorScheme
     @Binding var selectedAccount: Account
     @State var isPresentingTagView: Bool = false
     @State var showPassword: Bool = false
@@ -40,14 +41,14 @@ struct AccountEditView: View {
                         header: Label(
                             "Account Information",
                             systemImage: "storefront"
-                        )
+                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+
                     ) {
-                        TextField("Account Name", text: $selectedAccount.name)
-                        TextField(
-                            "Account Number",
-                            text: $selectedAccount.accountNumber
-                        )
-                        TextField("URL", text: $selectedAccount.url).onSubmit {
+                        getTextField(placeholder: "Account Name", text: $selectedAccount.name)
+                        getTextField(
+                            placeholder: "Account Number",
+                            text: $selectedAccount.accountNumber)
+                        getTextField(placeholder: "URL", text: $selectedAccount.url).onSubmit {
                             log.info("url -> \($selectedAccount.url)")
                         }
                     }
@@ -55,14 +56,16 @@ struct AccountEditView: View {
                         header: Label(
                             "Personal Information",
                             systemImage: "person"
-                        )
+                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
                     ) {
-                        TextField("Username", text: $selectedAccount.username)
+                        getTextField(placeholder: "Username", text: $selectedAccount.username)
                         HStack {
                             if showPassword {
-                                TextField("Password", text: $selectedAccount.password)
+                                getTextField(placeholder: "Password", text: $selectedAccount.password)
                             } else {
-                                SecureField("Password", text: $selectedAccount.password)
+                                SecureField("Password", text: $selectedAccount.password,
+                                prompt: Text("Password").foregroundColor(colorScheme == .dark ? darkPlaceholderColor : lightPlaceholderColor))
+
                             }
                             Spacer()
                             Button(action: {
@@ -72,19 +75,20 @@ struct AccountEditView: View {
                                 Image (systemName: imageName)
                             }
                         }
-                        TextField("Email", text: $selectedAccount.email).keyboardType(.emailAddress)
-                        TextField("Hint", text: $selectedAccount.hint).scrollDismissesKeyboard(.immediately)
+                        getTextField(placeholder: "Email", text: $selectedAccount.email).keyboardType(.emailAddress)
+                        getTextField(placeholder: "Hint", text: $selectedAccount.hint).scrollDismissesKeyboard(.immediately)
                     }
                     Section(
                         header: Label(
                             "Notes",
                             systemImage: "note.text"
-                        )
+                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
                     ) {
                         TextField(
                             "Notes",
                             text: $selectedAccount.notes,
-                            axis: .vertical
+                            prompt: Text("Notes").foregroundColor(getPlaceholderColor()),
+                            axis: .vertical,
                         ).lineLimit(3, reservesSpace: true).onSubmit {
                             log.info("notes -> \($selectedAccount.notes)")
                         }
@@ -93,13 +97,14 @@ struct AccountEditView: View {
                         header: Label(
                             "Tags",
                             systemImage: "tag"
-                        )
+                        ).foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
                     ) {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 Button("<manage>") {
                                     isPresentingTagView = true
-                                }
+                                }.foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
+
                                 ForEach(selectedAccount.tags, id: \.self) {
                                     tag in
                                     Text(tag)
@@ -153,4 +158,13 @@ struct AccountEditView: View {
         }
     }
 
+    func getPlaceholderColor() -> Color {
+        return colorScheme == .dark ? darkPlaceholderColor : lightPlaceholderColor
+    }
+
+    func getTextField (placeholder: String, text: Binding<String>) -> some View {
+        return TextField(placeholder,
+                         text: text,
+                         prompt: Text(placeholder).foregroundColor(getPlaceholderColor()))
+    }
 }

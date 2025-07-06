@@ -11,6 +11,7 @@ import SwiftUI
 struct ResultsView: View {
     @EnvironmentObject var dataManager: DataManager
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
     @State private var results: [Account] = []
     @State private var showingEntryDetails: Bool = false
     @State private var showLoadingScreen: Bool = false
@@ -50,6 +51,7 @@ struct ResultsView: View {
                 .listStyle(InsetGroupedListStyle())
                 .navigationTitle("\(filterType)")
                 .navigationBarTitleDisplayMode(.inline)
+                .foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
             }
         }
     }

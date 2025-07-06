@@ -33,6 +33,7 @@ struct SearchView: View {
     var resultsView: ResultsView?
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
 
     let log = Logger(label: "io.bytestream.bytepass.SearchView")
 
@@ -105,7 +106,7 @@ struct SearchView: View {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.white)
                             .padding(10)
-                            .background(Color.blue)
+                            .background(colorScheme == .dark ? darkForeground : lightForeground)
                         //.background(Color.primary)
                     }.disabled(searchText.isEmpty)
                         .cornerRadius(10)
@@ -257,6 +258,7 @@ struct SearchView: View {
         //.analyticsScreen(name: "\(SearchView.self)")
 
     }
+
     private func handleSync() async {
         googleService.dataManager = dataManager
         log.info("handleSync")

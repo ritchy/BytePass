@@ -12,6 +12,7 @@ import SwiftUI
 struct AccountDetailView: View {
     @EnvironmentObject var dataManager: DataManager
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
     @State var selectedAccount: Account
     @State var passwordText: String = "********"
     @State private var isPresentingEditView = false
@@ -215,6 +216,7 @@ struct AccountDetailView: View {
             log.debug("onAppear() .. consider dismissing ..")
             considerDismiss()
         }
+        .foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
         .padding(.all, 8)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -242,6 +244,7 @@ struct AccountDetailView: View {
         ) {
             NavigationStack {
                 AccountEditView(selectedAccount: $selectedAccount)
+                    .foregroundColor(colorScheme == .dark ? darkForeground : lightForeground)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
