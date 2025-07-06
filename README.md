@@ -68,10 +68,13 @@ This creates an Info.plist file with the following contents (redirectURI):
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.(redirectURI)/string>
+				<string>com.googleusercontent.apps.(redirectURI)</string>
 			</array>
 		</dict>
 	</array>
 </dict>
 </plist>
 ```
+
+If there is a conflicting build rule for Info.plist, you may need to resolve that.
+
