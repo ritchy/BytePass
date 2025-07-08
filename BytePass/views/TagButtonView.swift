@@ -26,7 +26,7 @@ struct TagButtonView: View {
                 Image(systemName: getImageName(from: buttonText))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 25, height: 25, alignment: .topLeading)
+                    .frame(width: 30, height: 30, alignment: .topLeading)
                     .foregroundColor(.blue)
                     .padding([.top, .leading], 0)
                 Spacer()
