@@ -21,15 +21,12 @@ struct SearchView: View {
     @State private var searchResults: [Account] = []
     @State private var currentSearchText = ""
     @State private var numberOfResults: Int = 0
-    @State private var showSyncingScreen: Bool = false
-    @State private var showSignOutScreen: Bool = false
-    @State private var showingResults = false
-    @State private var showSearchingScreen: Bool = false
-    @State private var isPresentingNewAccountView: Bool = false
+    @State private var currentScreen: String = ScreenViewModel.SearchView
     @State private var signedIn: Bool = false
     @FocusState private var searchIsFocused: Bool
     @State var newAccount: Account = Account.emptyAccount
-
+    @ObservedObject var screenViewModel: ScreenViewModel
+    
     var resultsView: ResultsView?
 
     @Environment(\.dismiss) private var dismiss
@@ -44,15 +41,17 @@ struct SearchView: View {
     ]
 
     init() {
+        screenViewModel = ScreenViewModel()
         //UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.blue]
     }
 
     var body: some View {
-        if showSearchingScreen {
+        if screenViewModel.currentView == ScreenViewModel.SearchingScreen {
             Text("Searching ...")
-        } else if showSyncingScreen {
+            //} else if showSyncingScreen {
+        } else if screenViewModel.currentView == ScreenViewModel.SyncingScreen {
             Text("Syncing ...")
-        } else if showSignOutScreen {
+        } else if screenViewModel.currentView == ScreenViewModel.SignOutScreen {
             Text("Signing out ...")
         } else {
             searchView()
@@ -60,13 +59,13 @@ struct SearchView: View {
     }
 
     func performSearch() {
-        showSearchingScreen = true
+        screenViewModel.currentView = ScreenViewModel.SearchingScreen
         searchResults = dataManager.searchEntries(query: searchText)
         log.info("search results \(searchResults.count)")
         currentSearchText = searchText
         searchText = ""
-        showSearchingScreen = false
-        showingResults = true
+        screenViewModel.currentView = ScreenViewModel.SearchView
+        screenViewModel.showingResultsScreen = true
     }
 
     func searchView() -> some View {
@@ -74,7 +73,7 @@ struct SearchView: View {
             if dataManager.entries.isEmpty {
                 Spacer()
                 Button {
-                    isPresentingNewAccountView = true
+                    screenViewModel.showingNewAccountScreen = true
                 } label: {
                     NoEntryView()
                 }
@@ -126,12 +125,12 @@ struct SearchView: View {
                     LazyVGrid(columns: columns, spacing: 10) {
                         Button(
                             action: {
-                                showSearchingScreen = true
+                                screenViewModel.currentView = ScreenViewModel.SearchingScreen
                                 selectedTag = "all"
                                 searchResults = dataManager.sortedByName()
                                 numberOfResults = searchResults.count
-                                showSearchingScreen = false
-                                showingResults = true
+                                screenViewModel.currentView = ScreenViewModel.ResultsView
+                                screenViewModel.showingResultsScreen = true
                             },
                             label: {
                                 TagButtonView(
@@ -146,15 +145,16 @@ struct SearchView: View {
                             Button(
                                 action: {
                                     selectedTag = tag
-                                    showSearchingScreen = true
+                                    screenViewModel.currentView = ScreenViewModel.SearchingScreen
                                     searchResults = dataManager.filterByTag(
                                         tag: tag
                                     )
                                     log.debug(
                                         "pre searching search results \(searchResults.count)"
                                     )
-                                    showSearchingScreen = false
-                                    showingResults = true
+                                    screenViewModel.currentView = ScreenViewModel.ResultsView
+                                    screenViewModel.showingResultsScreen = true
+
                                 },
                                 label: {
                                     TagButtonView(
@@ -184,7 +184,7 @@ struct SearchView: View {
                 HStack {
                     Spacer()
                     Button {
-                        isPresentingNewAccountView = true
+                        screenViewModel.showingNewAccountScreen = true
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -193,10 +193,10 @@ struct SearchView: View {
 
         }
         .sheet(
-            isPresented: $isPresentingNewAccountView,
+            isPresented: $screenViewModel.showingNewAccountScreen,
             onDismiss: {
                 log.info("onDismiss of new account view")
-                isPresentingNewAccountView = false
+                screenViewModel.showingNewAccountScreen = false
 
             }
         ) {
@@ -205,13 +205,13 @@ struct SearchView: View {
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
-                                isPresentingNewAccountView = false
+                                screenViewModel.showingNewAccountScreen = false
                                 newAccount = Account.emptyAccount
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Done") {
-                                isPresentingNewAccountView = false
+                                screenViewModel.showingNewAccountScreen = false
                                 Task {
                                     if newAccount.isValid() {
                                         await dataManager.addEntry(newAccount)
@@ -234,9 +234,10 @@ struct SearchView: View {
             //.toolbarBackground(Color.gray)
 
         }
-        .fullScreenCover(isPresented: $showingResults) {
+        .fullScreenCover(isPresented: $screenViewModel.showingResultsScreen) {
             NavigationStack {
                 ResultsView(
+                    screenViewModel: screenViewModel,
                     results: searchResults,
                     filterType: selectedTag != nil
                         ? "Tagged with \(selectedTag!)"
@@ -250,7 +251,8 @@ struct SearchView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("Home") {
-                            showingResults = false
+                            screenViewModel.currentView = ScreenViewModel.SearchView
+                            screenViewModel.showingResultsScreen = false
                             selectedTag = nil
                         }
                     }
@@ -357,12 +359,12 @@ struct SearchView: View {
     }
 
     private func signOutWithGoogleService() {
-        showSignOutScreen = true
+        screenViewModel.currentView = ScreenViewModel.SignOutScreen
         Task {
             try await googleService.signOut()
             try await Task.sleep(nanoseconds: 350_000_000)
             await checkSignedIn()
-            showSignOutScreen = false
+            screenViewModel.currentView = ScreenViewModel.SearchView
         }
     }
 
@@ -372,10 +374,11 @@ struct SearchView: View {
 
     func syncButton() -> some View {
         Button(action: {
-            showSyncingScreen = true
+            //showSyncingScreen = true
+            screenViewModel.currentView = ScreenViewModel.SyncingScreen
             Task {
                 await handleSync()
-                showSyncingScreen = false
+                screenViewModel.currentView = ScreenViewModel.SearchView
             }
         }) {
             Text("Sync")

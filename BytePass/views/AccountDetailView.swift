@@ -18,7 +18,8 @@ struct AccountDetailView: View {
     @State private var isPresentingEditView = false
     @State var isDeleted: Bool = false
     @Binding var results: [Account]
-    
+    @ObservedObject var screenViewModel: ScreenViewModel
+
     @State var messageToShow: String = "tap any field to copy"
 
     let log = Logger(label: "io.bytestream.bytepass.AccountDetailView")
@@ -41,7 +42,7 @@ struct AccountDetailView: View {
             await _ = dataManager.saveCurrentAccountsDocument()
         }
     }
-    
+
     var body: some View {
         if isDeleted {
             VStack {
@@ -57,7 +58,7 @@ struct AccountDetailView: View {
         }
     }
 
-    func handleCopy(fieldName:String, textToCopy: String) {
+    func handleCopy(fieldName: String, textToCopy: String) {
         if textToCopy.isEmpty || fieldName.isEmpty {
             showMessage(message: "tap any field to copy")
             return
@@ -75,8 +76,11 @@ struct AccountDetailView: View {
     func getMainView() -> some View {
         VStack(alignment: .center) {
             VStack {
-                Label(selectedAccount.name, systemImage: "storefront").padding([.bottom],12).font(.headline)
-                Text(messageToShow) //, systemImage: "doc.on.clipboard")
+                Label(selectedAccount.name, systemImage: "storefront").padding(
+                    [.bottom],
+                    12
+                ).font(.headline)
+                Text(messageToShow)  //, systemImage: "doc.on.clipboard")
                     .fontWeight(.light).font(.caption)
             }
             List {
@@ -91,9 +95,12 @@ struct AccountDetailView: View {
                         Text("Account Name:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
-                        Text(selectedAccount.name)//.fontWeight(.bold).font(.body)
+                        Text(selectedAccount.name)  //.fontWeight(.bold).font(.body)
                     }.onTapGesture {
-                        handleCopy(fieldName: "Account Name", textToCopy: selectedAccount.name)
+                        handleCopy(
+                            fieldName: "Account Name",
+                            textToCopy: selectedAccount.name
+                        )
                     }
 
                     HStack {
@@ -102,7 +109,10 @@ struct AccountDetailView: View {
                         Spacer()
                         Text(selectedAccount.accountNumber)
                     }.onTapGesture {
-                        handleCopy(fieldName: "Account Number", textToCopy: selectedAccount.accountNumber)
+                        handleCopy(
+                            fieldName: "Account Number",
+                            textToCopy: selectedAccount.accountNumber
+                        )
                     }
 
                     HStack {
@@ -111,7 +121,10 @@ struct AccountDetailView: View {
                         Spacer()
                         Text(selectedAccount.url)
                     }.onTapGesture {
-                        handleCopy(fieldName: "Account URL", textToCopy: selectedAccount.url)
+                        handleCopy(
+                            fieldName: "Account URL",
+                            textToCopy: selectedAccount.url
+                        )
                     }
 
                 }
@@ -127,28 +140,42 @@ struct AccountDetailView: View {
                         Spacer()
                         Text(selectedAccount.username)
                     }.onTapGesture {
-                        handleCopy(fieldName: "Username", textToCopy: selectedAccount.username)
+                        handleCopy(
+                            fieldName: "Username",
+                            textToCopy: selectedAccount.username
+                        )
                     }
 
                     HStack {
                         Text("Password:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer().background(Color.green).onTapGesture {
-                            handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
+                            handleCopy(
+                                fieldName: "Password",
+                                textToCopy: selectedAccount.password
+                            )
                         }
-                        Text(selectedAccount.password.isEmpty ? "(None)" : passwordText).privacySensitive()
+                        Text(
+                            selectedAccount.password.isEmpty
+                                ? "(None)" : passwordText
+                        ).privacySensitive()
                     }.onTapGesture {
-                        handleCopy(fieldName: "Password", textToCopy: selectedAccount.password)
+                        handleCopy(
+                            fieldName: "Password",
+                            textToCopy: selectedAccount.password
+                        )
                     }
 
-    
                     HStack {
                         Text("Email:")
                             .fontWeight(.light).font(.subheadline)
                         Spacer()
                         Text(selectedAccount.email)
                     }.onTapGesture {
-                        handleCopy(fieldName: "Email", textToCopy: selectedAccount.email)
+                        handleCopy(
+                            fieldName: "Email",
+                            textToCopy: selectedAccount.email
+                        )
                     }
 
                     HStack {
@@ -157,7 +184,10 @@ struct AccountDetailView: View {
                         Spacer()
                         Text(selectedAccount.hint)
                     }.onTapGesture {
-                        handleCopy(fieldName: "Hint", textToCopy: selectedAccount.hint)
+                        handleCopy(
+                            fieldName: "Hint",
+                            textToCopy: selectedAccount.hint
+                        )
                     }
 
                 }.onLongPressGesture(
@@ -183,7 +213,10 @@ struct AccountDetailView: View {
 
                     }
                 }.onTapGesture {
-                    handleCopy(fieldName: "Notes", textToCopy: selectedAccount.notes)
+                    handleCopy(
+                        fieldName: "Notes",
+                        textToCopy: selectedAccount.notes
+                    )
                 }
 
                 Section(
@@ -216,9 +249,17 @@ struct AccountDetailView: View {
             log.debug("onAppear() .. consider dismissing ..")
             considerDismiss()
         }
-        .foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
+        .foregroundColor(
+            colorScheme == .dark ? darkForegroundColor : lightForegroundColor
+        )
         .padding(.all, 8)
         .toolbar {
+            ToolbarItem(placement: .principal) {
+                Button("Home") {
+                    screenViewModel.currentView = ScreenViewModel.SearchView
+                    screenViewModel.showingResultsScreen = false
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Edit") {
                     isPresentingEditView = true
@@ -244,11 +285,16 @@ struct AccountDetailView: View {
         ) {
             NavigationStack {
                 AccountEditView(selectedAccount: $selectedAccount)
-                    .foregroundColor(colorScheme == .dark ? darkForegroundColor : lightForegroundColor)
+                    .foregroundColor(
+                        colorScheme == .dark
+                            ? darkForegroundColor : lightForegroundColor
+                    )
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Cancel") {
-                                let orig = dataManager.getEntryById(selectedAccount.id)
+                                let orig = dataManager.getEntryById(
+                                    selectedAccount.id
+                                )
                                 if orig != nil {
                                     selectedAccount = orig!
                                 }

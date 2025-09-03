@@ -15,14 +15,17 @@ struct ResultsView: View {
     @State private var results: [Account] = []
     @State private var showingEntryDetails: Bool = false
     @State private var showLoadingScreen: Bool = false
+    @ObservedObject var screenViewModel: ScreenViewModel
 
     let filterType: String
     let log = Logger(label: "io.bytestream.bytepass.ResultsView")
 
     public init(
+        screenViewModel: ScreenViewModel,
         results: [Account],
         filterType: String
     ) {
+        self.screenViewModel = screenViewModel
         self.results = results
         self.filterType = filterType
         log.info("Showing results for \(filterType)")
@@ -40,7 +43,8 @@ struct ResultsView: View {
                         NavigationLink(
                             destination: AccountDetailView(
                                 selectedAccount: entry,
-                                results: $results
+                                results: $results,
+                                screenViewModel: screenViewModel
                             )
                         ) {
                             ListEntryView(accountEntry: entry)
@@ -65,6 +69,7 @@ struct ResultsView: View {
 #Preview {
     NavigationView {
         ResultsView(
+            screenViewModel: ScreenViewModel(),
             results: [
                 Account(
                     name: "Acme Login",
